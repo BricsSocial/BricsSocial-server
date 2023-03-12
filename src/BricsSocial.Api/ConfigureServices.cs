@@ -1,6 +1,5 @@
 ﻿using BricsSocial.Api.Services;
 using BricsSocial.Application.Common.Interfaces;
-using BricsSocial.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -17,9 +16,6 @@ namespace BricsSocial.Api
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             services.AddHttpContextAccessor();
-
-            //services.AddHealthChecks()
-            //    .AddDbContextCheck<ApplicationDbContext>();
 
             services.AddControllers();
 
@@ -44,7 +40,7 @@ namespace BricsSocial.Api
                 // Add the fluent validations schema processor
                 configure.SchemaProcessors.Add(fluentValidationSchemaProcessor);
 
-                configure.Title = "CleanArchitecture API";
+                configure.Title = "BricsSocial API";
                 configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
                 {
                     Type = OpenApiSecuritySchemeType.ApiKey,

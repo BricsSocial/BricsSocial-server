@@ -14,6 +14,6 @@ namespace BricsSocial.Domain.Entities
         public int SpecialistId { get; set; }
         public Specialist Specialist { get; set; }
 
-        public List<ResumeReplyFeedback> Feedbacks { get; set; }
+        public List<ResumeReply> ResumeReplies { get; set; }
     }
 }

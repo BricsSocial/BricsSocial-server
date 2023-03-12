@@ -83,19 +83,13 @@ builder.Services.AddApiServices();
 
 var app = builder.Build();
 
+Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
-
-    // Initialise and seed database
-    using (var scope = app.Services.CreateScope())
-    {
-        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
-        await initialiser.InitialiseAsync();
-        await initialiser.SeedAsync();
-    }
 }
 else
 {
@@ -103,7 +97,14 @@ else
     app.UseHsts();
 }
 
-app.UseHealthChecks("/health");
+// Initialise and seed database
+using (var scope = app.Services.CreateScope())
+{
+    var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
+    await initialiser.InitialiseAsync();
+    await initialiser.SeedAsync();
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

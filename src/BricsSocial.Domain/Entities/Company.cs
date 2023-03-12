@@ -10,7 +10,7 @@ namespace BricsSocial.Domain.Entities
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Logo { get; set; }
+        public string? Logo { get; set; }
 
         public int CountryId { get; set; }
         public Country Country { get; set; }

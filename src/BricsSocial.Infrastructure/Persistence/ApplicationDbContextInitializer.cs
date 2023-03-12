@@ -65,6 +65,8 @@ namespace BricsSocial.Infrastructure.Persistence
             await SeedCountriesAsync();
 
             await SeedCompaniesAsync();
+
+            await SeedAgentsAsync();
         }
 
         public async Task SeedRolesAsync()
@@ -72,11 +74,14 @@ namespace BricsSocial.Infrastructure.Persistence
             // Default roles
             var administratorRole = new IdentityRole(UserRoles.Administrator);
             var agentRole = new IdentityRole(UserRoles.Agent);
+            var specialistRole = new IdentityRole(UserRoles.Specialist);
 
             if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
                 await _roleManager.CreateAsync(administratorRole);
             if (_roleManager.Roles.All(r => r.Name != agentRole.Name))
                 await _roleManager.CreateAsync(agentRole);
+            if (_roleManager.Roles.All(r => r.Name != specialistRole.Name))
+                await _roleManager.CreateAsync(specialistRole);
         }
 
         public async Task SeedAdminAsync()
@@ -90,7 +95,7 @@ namespace BricsSocial.Infrastructure.Persistence
 
             if (_userManager.Users.All(u => u.UserName != administratorUser.UserName))
             {
-                await _userManager.CreateAsync(administratorUser, "Admin123");
+                var createResult = await _userManager.CreateAsync(administratorUser, "Admin123!");
                 await _userManager.AddToRolesAsync(administratorUser, new[] { UserRoles.Administrator });
             }
         }
@@ -123,7 +128,7 @@ namespace BricsSocial.Infrastructure.Persistence
 
             var companies = new List<Company>
             {
-                new Company { Name = "Gazprom", Description = "Leading Oil and Gas company" }
+                new Company { Name = "Gazprom", Description = "Leading Oil and Gas company", CountryId = country.Id }
             };
 
             _context.Companies.AddRange(companies);
@@ -133,6 +138,9 @@ namespace BricsSocial.Infrastructure.Persistence
 
         public async Task SeedAgentsAsync()
         {
+            if (_context.Agents.Any())
+                return;
+
             var company = _context.Companies.Where(c => c.Name == "Gazprom").First();
 
             var agentUser = new ApplicationUser
@@ -144,7 +152,7 @@ namespace BricsSocial.Infrastructure.Persistence
             };
             if (_userManager.Users.All(u => u.Email != agentUser.Email))
             {
-                await _userManager.CreateAsync(agentUser, "agent123");
+                await _userManager.CreateAsync(agentUser, "Agent123!");
                 await _userManager.AddToRolesAsync(agentUser, new[] { UserRoles.Agent });
             }
 
@@ -152,8 +160,12 @@ namespace BricsSocial.Infrastructure.Persistence
             var agent = new Agent
             {
                 IdentityId = createdAgentUser.Id,
-                Position = "HR manager"
+                Position = "HR manager",
+                CompanyId = company.Id
             };
+
+            _context.Agents.Add(agent);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -2,10 +2,12 @@
 using BricsSocial.Infrastructure.Identity;
 using BricsSocial.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,11 +49,23 @@ namespace BricsSocial.Infrastructure
 
             services.AddTransient<IIdentityService, IdentityService>();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidateAudience = true,
+                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true,
+                    };
+                });
 
-            //services.AddAuthorization(options =>
-            //    options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+            services.AddAuthorization();
 
             return services;
         }

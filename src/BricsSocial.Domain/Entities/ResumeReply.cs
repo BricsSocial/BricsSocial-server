@@ -15,8 +15,8 @@ namespace BricsSocial.Domain.Entities
 
         public int AgentId { get; set; }
         public Agent Agent { get; set; }
-        public int VacancyId { get; set; }
-        public Vacancy Vacancy { get; set; }
+        public int? VacancyId { get; set; }
+        public Vacancy? Vacancy { get; set; }
 
         public List<ResumeReplyFeedback> Feedbacks { get; set; }
     }

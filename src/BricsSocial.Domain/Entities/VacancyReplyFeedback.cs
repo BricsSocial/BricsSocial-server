@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Domain.Entities
 {
-    public sealed class VacancyReplyFeedBack : EntityBase
+    public sealed class VacancyReplyFeedback : EntityBase
     {
         public string Message { get; set; }
         public FeedbackStatus Status { get; set; }
