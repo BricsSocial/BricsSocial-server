@@ -12,6 +12,9 @@ namespace BricsSocial.Domain.Entities
         public string Description { get; set; }
         public string Logo { get; set; }
 
+        public int CountryId { get; set; }
+        public Country Country { get; set; }
+
         public List<Agent> Agents { get; set; }
         public List<Vacancy> Vacancies { get; set; }
     }

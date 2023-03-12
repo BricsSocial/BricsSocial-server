@@ -22,19 +22,26 @@ public class IdentityService : IIdentityService
         _authorizationService = authorizationService;
     }
 
-    public async Task<string?> GetUserNameAsync(string userId)
+    public async Task<UserInfo?> GetUserInfoAsync(string userId)
     {
         var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
-
-        return user.UserName;
+        var userInfo = new UserInfo
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+        };
+        return userInfo;
     }
 
-    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+    public async Task<(Result Result, string UserId)> CreateUserAsync(UserInfo userInfo, string password)
     {
         var user = new ApplicationUser
         {
-            UserName = userName,
-            Email = userName,
+            UserName = userInfo.Email,
+            Email = userInfo.Email,
+            FirstName = userInfo.FirstName,
+            LastName = userInfo.LastName
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -47,22 +54,6 @@ public class IdentityService : IIdentityService
         var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
         return user != null && await _userManager.IsInRoleAsync(user, role);
-    }
-
-    public async Task<bool> AuthorizeAsync(string userId, string policyName)
-    {
-        var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
-
-        if (user == null)
-        {
-            return false;
-        }
-
-        var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
-
-        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
-
-        return result.Succeeded;
     }
 
     public async Task<Result> DeleteUserAsync(string userId)

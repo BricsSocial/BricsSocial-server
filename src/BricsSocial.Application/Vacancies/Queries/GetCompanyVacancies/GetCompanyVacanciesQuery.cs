@@ -14,7 +14,7 @@ namespace BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies
     [Authorize(Roles = UserRoles.Agent)]
     public record GetCompanyVacanciesQuery : IRequest<CompanyVacanciesVm>
     {
-        public string? CompanyId { get; set; }
+        public int? CompanyId { get; set; }
     }
 
     public sealed class GetCompanyVacanciesQueryHandler : IRequestHandler<GetCompanyVacanciesQuery, CompanyVacanciesVm>
@@ -32,7 +32,7 @@ namespace BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies
         {
             var userId = _currentUser.UserId;
             var agent = await _context.Agents
-                .Where(a => a.Id == userId)
+                .Where(a => a.IdentityId == userId)
                 .FirstOrDefaultAsync();
 
             if (agent is null)

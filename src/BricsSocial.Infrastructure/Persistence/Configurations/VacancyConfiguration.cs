@@ -9,18 +9,18 @@ using BricsSocial.Domain.Entities;
 
 namespace BricsSocial.Infrastructure.Persistence.Configurations
 {
-    public class VacancyConfiguration : IEntityTypeConfiguration<Vacancy>
+    public sealed class VacancyConfiguration : IEntityTypeConfiguration<Vacancy>
     {
         public void Configure(EntityTypeBuilder<Vacancy> builder)
         {
-            builder.Property(t => t.Id)
-                .HasMaxLength(200)
+            builder.Property(v => v.Name)
+                .HasMaxLength(100)
                 .IsRequired();
-            builder.Property(t => t.Name)
-                .HasMaxLength(200)
+            builder.Property(t => t.Requirements)
+                .HasMaxLength(1500)
                 .IsRequired();
-            builder.Property(t => t.Name)
-                .HasMaxLength(200)
+            builder.Property(t => t.Offerings)
+                .HasMaxLength(1500)
                 .IsRequired();
         }
     }

@@ -10,7 +10,7 @@ namespace BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies
 {
     public sealed class VacancyDto
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; init; }
         public string Requirements { get; init; }
         public string Offerings { get; init; }

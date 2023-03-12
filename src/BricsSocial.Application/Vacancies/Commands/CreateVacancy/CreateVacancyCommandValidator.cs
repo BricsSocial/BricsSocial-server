@@ -10,7 +10,7 @@ namespace BricsSocial.Application.Vacancies.Commands.CreateVacancy
 {
     public class CreateVacancyCommandValidator : AbstractValidator<CreateVacancyCommand>
     {
-        private const int NameMaxLength = 50;
+        private const int NameMaxLength = 100;
         private const int RequirementsMaxLength = 1500;
         private const int OfferingsMaxLength = 1500;
 

@@ -10,13 +10,13 @@ using System.Data;
 namespace BricsSocial.Application.Vacancies.Commands.UpdateVacancyStatus
 {
     [Authorize(Roles = UserRoles.Agent)]
-    public record UpdateVacancyStatusCommand : IRequest<string>
+    public record UpdateVacancyStatusCommand : IRequest<int>
     {
-        public string? VacancyId { get; set; }
+        public int? VacancyId { get; set; }
         public VacancyStatus VacancyStatus { get; set; }
     }
 
-    public sealed class UpdateVacancyStatusCommandHandler : IRequestHandler<UpdateVacancyStatusCommand, string>
+    public sealed class UpdateVacancyStatusCommandHandler : IRequestHandler<UpdateVacancyStatusCommand, int>
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUser;
@@ -27,11 +27,11 @@ namespace BricsSocial.Application.Vacancies.Commands.UpdateVacancyStatus
             _currentUser = currentUser;
         }
 
-        public async Task<string> Handle(UpdateVacancyStatusCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(UpdateVacancyStatusCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.UserId;
             var agent = await _context.Agents
-                .Where(a => a.Id == userId)
+                .Where(a => a.IdentityId == userId)
                 .FirstOrDefaultAsync();
 
             if (agent is null)

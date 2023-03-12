@@ -8,14 +8,14 @@ using BricsSocial.Application.Common.Exceptions;
 namespace BricsSocial.Application.Vacancies.Commands.CreateVacancy
 {
     [Authorize(Roles = UserRoles.Agent)]
-    public record CreateVacancyCommand : IRequest<string>
+    public record CreateVacancyCommand : IRequest<int>
     {
         public string? Name { get; set; }
         public string? Requirements { get; set; }
         public string? Offerings { get; set; }
     }
 
-    public sealed class CreateVacancyCommandHandler : IRequestHandler<CreateVacancyCommand, string>
+    public sealed class CreateVacancyCommandHandler : IRequestHandler<CreateVacancyCommand, int>
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUser;
@@ -26,11 +26,11 @@ namespace BricsSocial.Application.Vacancies.Commands.CreateVacancy
             _currentUser = currentUser;
         }
 
-        public async Task<string> Handle(CreateVacancyCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateVacancyCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.UserId;
             var agent = await _context.Agents
-                .Where(a => a.Id == userId)
+                .Where(a => a.IdentityId == userId)
                 .FirstOrDefaultAsync();
 
             if (agent is null)

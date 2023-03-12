@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Domain.Entities
 {
-    public sealed class Specialist : BaseEntity
+    public sealed class Country : EntityBase
     {
         public string Name { get; set; }
 
-        public string Photo { get; set; }
-
-        public string About { get; set; }
+        public List<Specialist> Specialists { get; set; }
+        public List<Company> Companies { get; set; }
     }
 }

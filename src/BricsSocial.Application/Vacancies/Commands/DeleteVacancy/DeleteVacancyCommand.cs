@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 namespace BricsSocial.Application.Vacancies.Commands.DeleteVacancy
 {
     [Authorize(Roles = UserRoles.Agent)]
-    public record DeleteVacancyCommand : IRequest<string>
+    public record DeleteVacancyCommand : IRequest<int>
     {
-        public string? VacancyId { get; set; }
+        public int? VacancyId { get; set; }
     }
 
-    public sealed class DeleteVacancyCommandHandler : IRequestHandler<DeleteVacancyCommand, string>
+    public sealed class DeleteVacancyCommandHandler : IRequestHandler<DeleteVacancyCommand, int>
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUser;
@@ -24,11 +24,11 @@ namespace BricsSocial.Application.Vacancies.Commands.DeleteVacancy
             _currentUser = currentUser;
         }
 
-        public async Task<string> Handle(DeleteVacancyCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteVacancyCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.UserId;
             var agent = await _context.Agents
-                .Where(a => a.Id == userId)
+                .Where(a => a.IdentityId == userId)
                 .FirstOrDefaultAsync();
 
             if (agent is null)

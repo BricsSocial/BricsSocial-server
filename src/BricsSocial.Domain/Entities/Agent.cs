@@ -10,9 +10,10 @@ namespace BricsSocial.Domain.Entities
     {
         public string IdentityId { get; set; }
 
-        public string Name { get; set; }
+        public string Position { get; set; }
+        public string Photo { get; set; }
 
-        public string CompanyId { get; set; }
+        public int CompanyId { get; set; }
         public Company Company { get; set; }
     }
 }

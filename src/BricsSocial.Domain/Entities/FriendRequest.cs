@@ -10,10 +10,10 @@ namespace BricsSocial.Domain.Entities
     {
         public string Message { get; set; }
 
-        public string FromSpecialistId { get; set; }
+        public int FromSpecialistId { get; set; }
         public Specialist FromSpecialist { get; set; }
 
-        public string ToSpecialistId { get; set; }
+        public int ToSpecialistId { get; set; }
         public Specialist ToSpecialist { get; set; }
     }
 }

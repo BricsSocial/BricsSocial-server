@@ -10,12 +10,12 @@ namespace BricsSocial.Domain.Entities
     {
         public string Message { get; set; }
 
-        public string ResumeId { get; set; }
+        public int ResumeId { get; set; }
         public Resume Resume { get; set; }
 
-        public string AgentId { get; set; }
+        public int AgentId { get; set; }
         public Agent Agent { get; set; }
-        public string VacancyId { get; set; }
+        public int VacancyId { get; set; }
         public Vacancy Vacancy { get; set; }
 
         public List<ResumeReplyFeedback> Feedbacks { get; set; }

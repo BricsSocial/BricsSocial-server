@@ -1,4 +1,5 @@
 ﻿using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Application.Common.Models;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 
@@ -21,14 +22,14 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
     {
         var requestName = typeof(TRequest).Name;
         var userId = _currentUserService.UserId ?? string.Empty;
-        string? userName = string.Empty;
+        UserInfo? userInfo = null;
 
         if (!string.IsNullOrEmpty(userId))
         {
-            userName = await _identityService.GetUserNameAsync(userId);
+            userInfo = await _identityService.GetUserInfoAsync(userId);
         }
 
         _logger.LogInformation("CleanArchitecture Request: {Name} {@UserId} {@UserName} {@Request}",
-            requestName, userId, userName, request);
+            requestName, userId, userInfo, request);
     }
 }

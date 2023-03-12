@@ -10,7 +10,7 @@ namespace BricsSocial.Domain.Entities
         public string Offerings { get; set; }
         public VacancyStatus Status { get; set; }
 
-        public string CompanyId { get; set; }
+        public int CompanyId { get; set; }
         public Company Company { get; set; }
         public List<VacancyReply> VacancyReplies { get; set; }
     }

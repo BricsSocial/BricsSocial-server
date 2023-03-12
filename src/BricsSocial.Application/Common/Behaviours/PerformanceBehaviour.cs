@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Application.Common.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -38,15 +39,15 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         {
             var requestName = typeof(TRequest).Name;
             var userId = _currentUserService.UserId ?? string.Empty;
-            var userName = string.Empty;
+            UserInfo? userInfo = null;
 
             if (!string.IsNullOrEmpty(userId))
             {
-                userName = await _identityService.GetUserNameAsync(userId);
+                userInfo = await _identityService.GetUserInfoAsync(userId);
             }
 
             _logger.LogWarning("BricsSocial Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
-                requestName, elapsedMilliseconds, userId, userName, request);
+                requestName, elapsedMilliseconds, userId, userInfo, request);
         }
 
         return response;

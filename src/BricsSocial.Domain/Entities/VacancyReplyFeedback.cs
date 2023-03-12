@@ -12,9 +12,9 @@ namespace BricsSocial.Domain.Entities
         public string Message { get; set; }
         public FeedbackStatus Status { get; set; }
 
-        public string AgentId { get; set; }
+        public int AgentId { get; set; }
         public Agent Agent { get; set; }
-        public string VacancyReplyId { get; set; }
+        public int VacancyReplyId { get; set; }
         public VacancyReply VacancyReply { get; set; }
     }
 }

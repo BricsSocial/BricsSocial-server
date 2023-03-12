@@ -13,7 +13,7 @@ namespace BricsSocial.Domain.Entities
         public string Message { get; set; }
         public FeedbackStatus Status { get; set; }
 
-        public string ResumeReplyId { get; set; }
+        public int ResumeReplyId { get; set; }
         public ResumeReply ResumeReply { get; set; }
     }
 }
