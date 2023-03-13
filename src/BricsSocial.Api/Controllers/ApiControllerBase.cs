@@ -6,6 +6,7 @@ namespace BricsSocial.Api.Controllers;
 
 [ApiController]
 [ApiExceptionFilter]
+[Produces("application/json")]
 [Route("api/[controller]")]
 public abstract class ApiControllerBase : ControllerBase
 {

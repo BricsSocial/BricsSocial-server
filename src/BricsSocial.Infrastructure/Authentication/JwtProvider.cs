@@ -25,20 +25,18 @@ namespace BricsSocial.Infrastructure.Authentication
         {
             var loginTime = DateTime.UtcNow;
 
-
-            var _options = new IdentityOptions();
+            //var _options = new IdentityOptions();
             var claims = new Claim[]
             {
                 new(JwtRegisteredClaimNames.Email, userInfo.Email),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new(JwtRegisteredClaimNames.AuthTime, loginTime.ToString()),
-                new(_options.ClaimsIdentity.UserIdClaimType, ""),
-                new(_options.ClaimsIdentity.RoleClaimType, ""),
-
+                new(ClaimTypes.NameIdentifier, userInfo.UserId), //_options.ClaimsIdentity.UserIdClaimType
+                new(ClaimTypes.Role, userInfo.Role), //_options.ClaimsIdentity.RoleClaimType
             };
 
             var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret)),
+                _jwtOptions.GetSymmetricSecurityKey(),
                 SecurityAlgorithms.HmacSha256Signature
                 );
 

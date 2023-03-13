@@ -1,4 +1,7 @@
-﻿namespace BricsSocial.Api.Controllers
+﻿using BricsSocial.Application.Auth.Commands.Login;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BricsSocial.Api.Controllers
 {
     public class AuthController : ApiControllerBase
     {
@@ -8,5 +11,15 @@
         {
             _logger = logger;
         }
+
+        [HttpPost("login")]
+        [ProducesDefaultResponseType]
+        public async Task<TokenResponse> Login(LoginCommand loginCommand, CancellationToken cancellationToken)
+        {
+            return await Mediator.Send(loginCommand, cancellationToken);
+        }
+
+        
+
     }
 }

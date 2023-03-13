@@ -1,3 +1,4 @@
+using BricsSocial.Application.Vacancies.Commands.CreateVacancy;
 using BricsSocial.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,16 +14,10 @@ namespace BricsSocial.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<Vacancy> GetAll()
+        [HttpPost]
+        public async Task<int> CreateVacancy(CreateVacancyCommand command)
         {
-            return new List<Vacancy>
-            {
-                new Vacancy
-                {
-                    Name = "Developer",
-                }
-            };
+            return await Mediator.Send(command);
         }
     }
 }

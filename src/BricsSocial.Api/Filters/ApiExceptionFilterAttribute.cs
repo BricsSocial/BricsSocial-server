@@ -1,4 +1,5 @@
-﻿using BricsSocial.Application.Common.Exceptions;
+﻿using BricsSocial.Api.Utils;
+using BricsSocial.Application.Common.Exceptions;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -11,7 +12,6 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
     public ApiExceptionFilterAttribute()
     {
-        // Register known exception types and handlers.
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
                 { typeof(ValidationException), HandleValidationException },
@@ -42,6 +42,25 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             HandleInvalidModelStateException(context);
             return;
         }
+
+        HandleInternalServerError(context);
+    }
+
+    private void HandleInternalServerError(ExceptionContext context)
+    {
+        var details = new ProblemDetails
+        {
+            Status = StatusCodes.Status500InternalServerError,
+            Title = "Internal server error",
+            Detail = context.Exception.GetMessage()
+        };
+
+        context.Result = new ObjectResult(details)
+        {
+            StatusCode = StatusCodes.Status500InternalServerError
+        };
+
+        context.ExceptionHandled = true;
     }
 
     private void HandleValidationException(ExceptionContext context)

@@ -1,4 +1,5 @@
 ﻿using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Infrastructure.Authentication;
 using BricsSocial.Infrastructure.Identity;
 using BricsSocial.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
@@ -49,21 +50,35 @@ namespace BricsSocial.Infrastructure
 
             services.AddTransient<IIdentityService, IdentityService>();
 
-            
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            var jwtOptions = new JwtOptions();
+            configuration.Bind(nameof(JwtOptions), jwtOptions);
+            services.AddSingleton(jwtOptions);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                //x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.ISSUER,
-                        ValidateAudience = true,
-                        ValidAudience = AuthOptions.AUDIENCE,
-                        ValidateLifetime = true,
-                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        ValidateIssuerSigningKey = true,
-                    };
-                });
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience,
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(),
+                    
+                    RequireExpirationTime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+            services.AddScoped<IJwtProvider, JwtProvider>();
 
             services.AddAuthorization();
 

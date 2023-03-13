@@ -9,29 +9,55 @@ namespace BricsSocial.Infrastructure.Identity;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-    private readonly IAuthorizationService _authorizationService;
 
     public IdentityService(
-        UserManager<ApplicationUser> userManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        IAuthorizationService authorizationService)
+        UserManager<ApplicationUser> userManager)
     {
-        _userManager = userManager;
-        _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-        _authorizationService = authorizationService;
+        _userManager = userManager;;
     }
 
     public async Task<UserInfo?> GetUserInfoAsync(string userId)
     {
-        var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return null;
+
+        return await ToUserInfo(user);
+    }
+
+    public async Task<UserInfo?> GetUserInfoByEmailAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return null;
+
+        return await ToUserInfo(user);
+    }
+
+    private async Task<UserInfo> ToUserInfo(ApplicationUser user)
+    {
+        var userRoles = await _userManager.GetRolesAsync(user);
         var userInfo = new UserInfo
         {
+            UserId = user.Id,
+            Email = user.Email,
+            Role = userRoles.FirstOrDefault(),
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Email = user.Email,
         };
         return userInfo;
+    }
+
+    public async Task<bool> CheckPasswordAsync(string email, string password)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user == null)
+            return false;
+
+        var passwordCheck = await _userManager.CheckPasswordAsync(user, password);
+
+        return passwordCheck;
     }
 
     public async Task<(Result Result, string UserId)> CreateUserAsync(UserInfo userInfo, string password)
@@ -49,13 +75,6 @@ public class IdentityService : IIdentityService
         return (result.ToApplicationResult(), user.Id);
     }
 
-    public async Task<bool> IsInRoleAsync(string userId, string role)
-    {
-        var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
-
-        return user != null && await _userManager.IsInRoleAsync(user, role);
-    }
-
     public async Task<Result> DeleteUserAsync(string userId)
     {
         var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
@@ -69,4 +88,6 @@ public class IdentityService : IIdentityService
 
         return result.ToApplicationResult();
     }
+
+
 }

@@ -1,9 +1,15 @@
 ﻿using BricsSocial.Api.Services;
 using BricsSocial.Application.Common.Interfaces;
+using FluentValidation;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using ZymLabs.NSwag.FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.OpenApi.Models;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace BricsSocial.Api
 {
@@ -17,40 +23,60 @@ namespace BricsSocial.Api
 
             services.AddHttpContextAccessor();
 
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();
-
-            //services.AddRazorPages();
-
-            services.AddScoped<FluentValidationSchemaProcessor>(provider =>
-            {
-                var validationRules = provider.GetService<IEnumerable<FluentValidationRule>>();
-                var loggerFactory = provider.GetService<ILoggerFactory>();
-
-                return new FluentValidationSchemaProcessor(provider, validationRules, loggerFactory);
-            });
 
             // Customise default API behaviour
             services.Configure<ApiBehaviorOptions>(options =>
                 options.SuppressModelStateInvalidFilter = true);
 
-            services.AddOpenApiDocument((configure, serviceProvider) =>
+            //services.AddScoped<FluentValidationSchemaProcessor>(provider =>
+            //{
+            //    var validationRules = provider.GetService<IEnumerable<FluentValidationRule>>();
+            //    var loggerFactory = provider.GetService<ILoggerFactory>();
+
+            //    return new FluentValidationSchemaProcessor(provider, validationRules, loggerFactory);
+            //});
+
+            services.AddSwaggerGen(s =>
             {
-                var fluentValidationSchemaProcessor = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<FluentValidationSchemaProcessor>();
+                s.SwaggerDoc("v1", new OpenApiInfo() { Title = "BricsSocial API", Version = "v1" });
+                s.CustomSchemaIds(x => x.GetCustomAttributes(false).OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
 
-                // Add the fluent validations schema processor
-                configure.SchemaProcessors.Add(fluentValidationSchemaProcessor);
+                //s.ExampleFilters();
 
-                configure.Title = "BricsSocial API";
-                configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                s.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
                 {
-                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Description = 
+        "JWT Authorization header using the Bearer scheme. \r\n\r\n Try login request, copy token from response. \r\n\r\n Enter 'Bearer' [space] and then copied token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
                     Name = "Authorization",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme
                 });
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    {
+                     new OpenApiSecurityScheme
+                     {
+                       Reference = new OpenApiReference
+                       {
+                         Type = ReferenceType.SecurityScheme,
+                         Id = JwtBearerDefaults.AuthenticationScheme
+                       }
+                      },
+                      new string[] { }
+                    }
+                });
+                //s.EnableAnnotations();
 
-                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlPath = AppContext.BaseDirectory + "\\" + xmlFile;
+                //s.IncludeXmlComments(xmlPath);
             });
+
+            
+            services.TryAddTransient<IValidatorFactory, ServiceProviderValidatorFactory>(); // update
+            services.AddFluentValidationRulesToSwagger();
 
             return services;
         }

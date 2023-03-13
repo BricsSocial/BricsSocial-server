@@ -9,14 +9,11 @@ namespace BricsSocial.Application.Common.Behaviours;
 public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly ICurrentUserService _currentUserService;
-    private readonly IIdentityService _identityService;
 
     public AuthorizationBehaviour(
-        ICurrentUserService currentUserService,
-        IIdentityService identityService)
+        ICurrentUserService currentUserService)
     {
         _currentUserService = currentUserService;
-        _identityService = identityService;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -42,8 +39,11 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
                 {
                     foreach (var role in roles)
                     {
-                        var isInRole = await _identityService.IsInRoleAsync(_currentUserService.UserId, role.Trim());
-                        if (isInRole)
+                        var userRole = _currentUserService.Role;
+
+                        //var isInRole =  //await _identityService.IsInRoleAsync(_currentUserService.UserId, role.Trim());
+                        //if (isInRole)
+                        if (userRole != null && userRole == role)
                         {
                             authorized = true;
                             break;

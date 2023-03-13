@@ -17,10 +17,17 @@ namespace BricsSocial.Infrastructure.Persistence
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
     {
+        public DbSet<Specialist> Specialists => Set<Specialist>();
         public DbSet<Agent> Agents => Set<Agent>();
-        public DbSet<Company> Companies => Set<Company>();
         public DbSet<Country> Countries => Set<Country>();
+        public DbSet<Company> Companies => Set<Company>();
         public DbSet<Vacancy> Vacancies => Set<Vacancy>();
+        public DbSet<VacancyReply> VacancyReplies => Set<VacancyReply>();
+        public DbSet<VacancyReplyFeedback> VacancyReplyFeedbacks => Set<VacancyReplyFeedback>();
+        public DbSet<Resume> Resumes => Set<Resume>();
+        public DbSet<ResumeReply> ResumeReplies => Set<ResumeReply>();
+        public DbSet<ResumeReplyFeedback> ResumeReplyFeedbacks => Set<ResumeReplyFeedback>();
+        public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
 
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
