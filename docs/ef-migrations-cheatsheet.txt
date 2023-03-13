@@ -1,0 +1,2 @@
+dotnet ef migrations add "Initial" --project src\BricsSocial.Infrastructure --startup-project src\BricsSocial.Api --output-dir Persistence\Migrations
+dotnet ef database update --project src\BricsSocial.Infrastructure --startup-project src\BricsSocial.Api
