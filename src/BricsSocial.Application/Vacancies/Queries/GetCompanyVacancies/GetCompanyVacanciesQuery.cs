@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies
 {
-    [Authorize(Roles = UserRoles.Agent)]
     public record GetCompanyVacanciesQuery : IRequest<CompanyVacanciesVm>
     {
         public int? CompanyId { get; set; }
@@ -30,14 +29,6 @@ namespace BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies
 
         public async Task<CompanyVacanciesVm> Handle(GetCompanyVacanciesQuery request, CancellationToken cancellationToken)
         {
-            var userId = _currentUser.UserId;
-            var agent = await _context.Agents
-                .Where(a => a.IdentityId == userId)
-                .FirstOrDefaultAsync();
-
-            if (agent is null)
-                throw new AgentUserNotFound(userId);
-
             var company = await _context.Companies
                 .Where(c => c.Id == request.CompanyId)
                 .FirstOrDefaultAsync();

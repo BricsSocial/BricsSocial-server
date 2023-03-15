@@ -1,5 +1,6 @@
 ﻿using BricsSocial.Application.Common.Exceptions;
 using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Application.Common.Security;
 using BricsSocial.Application.Vacancies.Commands.CreateVacancy;
 using MediatR;
 using System;
@@ -12,8 +13,8 @@ namespace BricsSocial.Application.Auth.Commands.Login
 {
     public record class LoginCommand : IRequest<TokenResponse>
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
     }
 
     public sealed class LoginCommandHandler : IRequestHandler<LoginCommand, TokenResponse>

@@ -38,6 +38,7 @@ using (var scope = app.Services.CreateScope())
     await initialiser.SeedAsync();
 }
 
+app.UseCors(builder => builder.AllowAnyOrigin());
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -48,6 +49,7 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseRouting();
+
 
 app.UseAuthentication();
 app.UseIdentityServer();

@@ -1,5 +1,7 @@
 ﻿using BricsSocial.Api.Services;
+using BricsSocial.Api.Swagger;
 using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Application.Common.Security;
 using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,8 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System.ComponentModel;
 using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace BricsSocial.Api
 {
@@ -25,6 +29,7 @@ namespace BricsSocial.Api
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();
+            services.AddCors();
 
             // Customise default API behaviour
             services.Configure<ApiBehaviorOptions>(options =>
@@ -72,8 +77,11 @@ namespace BricsSocial.Api
                 //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 //var xmlPath = AppContext.BaseDirectory + "\\" + xmlFile;
                 //s.IncludeXmlComments(xmlPath);
-            });
 
+                //s.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+                //s.OperationFilter<AppendAuthorizeToSummaryOperationFilter<AuthorizeAttribute>>();
+                s.OperationFilter<AppendCustomAuthorizeToSummaryOperationFilter>();
+            });
             
             services.TryAddTransient<IValidatorFactory, ServiceProviderValidatorFactory>(); // update
             services.AddFluentValidationRulesToSwagger();

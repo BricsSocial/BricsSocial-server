@@ -1,4 +1,5 @@
 ﻿using BricsSocial.Domain.Entities;
+using BricsSocial.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,6 +14,7 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Specialist> builder)
         {
+            builder.HasOne<ApplicationUser>().WithOne().HasForeignKey<Specialist>(a => a.IdentityId);
             builder.HasOne(s => s.Resume).WithOne(r => r.Specialist).HasForeignKey<Resume>(r => r.SpecialistId);
             builder.HasMany(s => s.FromFriendRequests).WithOne(f => f.FromSpecialist);//.HasForeignKey(f => f.FromSpecialistId);
             builder.HasMany(s => s.ToFriendRequests).WithOne(f => f.ToSpecialist);//.HasForeignKey(f => f.ToSpecialistId);
