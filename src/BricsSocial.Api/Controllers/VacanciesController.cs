@@ -1,6 +1,7 @@
 using BricsSocial.Api.Swagger;
 using BricsSocial.Application.Vacancies.Commands.CreateVacancy;
 using BricsSocial.Application.Vacancies.Commands.DeleteVacancy;
+using BricsSocial.Application.Vacancies.Queries.Dtos;
 using BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies;
 using BricsSocial.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -33,5 +34,11 @@ namespace BricsSocial.Api.Controllers
                 CompanyId = companyId
             });
         }
+
+        //[HttpGet]
+        //public async Task<IEnumerable<VacancyDto>> Get()
+        //{
+
+        //}
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BricsSocial.Application.Common.Exceptions;
 using BricsSocial.Application.Common.Interfaces;
 using BricsSocial.Application.Common.Security;
+using BricsSocial.Application.Vacancies.Queries.Dtos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,12 +20,10 @@ namespace BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies
     public sealed class GetCompanyVacanciesQueryHandler : IRequestHandler<GetCompanyVacanciesQuery, CompanyVacanciesVm>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUser;
 
-        public GetCompanyVacanciesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+        public GetCompanyVacanciesQueryHandler(IApplicationDbContext context)
         {
             _context = context;
-            _currentUser = currentUser;
         }
 
         public async Task<CompanyVacanciesVm> Handle(GetCompanyVacanciesQuery request, CancellationToken cancellationToken)

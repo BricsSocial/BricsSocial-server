@@ -41,12 +41,15 @@ namespace BricsSocial.Infrastructure
 
             services.AddScoped<ApplicationDbContextInitializer>();
 
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddRoles<IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            //services.AddDefaultIdentity<ApplicationUser>()
+            //    .AddRoles<IdentityRole>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            //services.AddIdentityServer()
+            //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddTransient<IIdentityService, IdentityService>();
 

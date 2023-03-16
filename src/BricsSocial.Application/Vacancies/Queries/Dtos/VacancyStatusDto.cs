@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies
+namespace BricsSocial.Application.Vacancies.Queries.Dtos
 {
     public sealed class VacancyStatusDto
     {

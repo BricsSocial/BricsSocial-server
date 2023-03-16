@@ -1,21 +1,13 @@
 ﻿using BricsSocial.Application.Common.Interfaces;
 using BricsSocial.Domain.Entities;
 using BricsSocial.Infrastructure.Identity;
-using Duende.IdentityServer.EntityFramework.Options;
-using MediatR;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BricsSocial.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
         public DbSet<Specialist> Specialists => Set<Specialist>();
         public DbSet<Agent> Agents => Set<Agent>();
@@ -30,9 +22,8 @@ namespace BricsSocial.Infrastructure.Persistence
         public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
 
         public ApplicationDbContext(
-            DbContextOptions<ApplicationDbContext> options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions)
-            : base(options, operationalStoreOptions)
+            DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
 
         }
