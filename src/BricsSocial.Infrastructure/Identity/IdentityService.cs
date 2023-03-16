@@ -41,9 +41,7 @@ public class IdentityService : IIdentityService
         {
             UserId = user.Id,
             Email = user.Email,
-            Role = userRoles.FirstOrDefault(),
-            FirstName = user.FirstName,
-            LastName = user.LastName,
+            Role = userRoles.FirstOrDefault()
         };
         return userInfo;
     }
@@ -65,9 +63,7 @@ public class IdentityService : IIdentityService
         var user = new ApplicationUser
         {
             UserName = userInfo.Email,
-            Email = userInfo.Email,
-            FirstName = userInfo.FirstName,
-            LastName = userInfo.LastName
+            Email = userInfo.Email
         };
 
         var createUserResult = await _userManager.CreateAsync(user, password);

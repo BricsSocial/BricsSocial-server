@@ -16,8 +16,4 @@
     <ProjectReference Include="..\BricsSocial.Domain\BricsSocial.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Auth\Commands\Registration\" />
-  </ItemGroup>
-
 </Project>

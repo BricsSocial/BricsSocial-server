@@ -17,8 +17,17 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
             builder.HasOne<ApplicationUser>().WithOne().HasForeignKey<Agent>(a => a.IdentityId);
             builder.Property(a => a.IdentityId)
                 .IsRequired();
+            builder.Property(a => a.Email)
+                .IsRequired();
+            builder.Property(a => a.FirstName)
+                .HasMaxLength(Agent.Invariants.FirstNameMaxLength)
+                .IsRequired();
+            builder.Property(a => a.LastName)
+                .HasMaxLength(Agent.Invariants.LastNameMaxLength)
+                .IsRequired();
+
             builder.Property(a => a.Position)
-                .HasMaxLength(200)
+                .HasMaxLength(Agent.Invariants.PositionMaxLength)
                 .IsRequired();
         }
     }

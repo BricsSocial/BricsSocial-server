@@ -13,7 +13,7 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<VacancyReplyFeedback> builder)
         {
             builder.Property(r => r.Message)
-                 .HasMaxLength(1500)
+                 .HasMaxLength(VacancyReplyFeedback.Invariants.MessageMaxLength)
                  .IsRequired();
         }
     }

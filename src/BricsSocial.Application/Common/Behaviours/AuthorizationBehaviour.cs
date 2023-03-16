@@ -20,7 +20,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
     {
         var authorizeAttributes = request.GetType().GetCustomAttributes<AuthorizeAttribute>();
 
-        if (authorizeAttributes.Any())
+        if (authorizeAttributes.Any() && _currentUserService.Role != UserRoles.Administrator)
         {
             // Must be authenticated user
             if (_currentUserService.UserId == null)

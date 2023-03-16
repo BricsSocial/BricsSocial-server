@@ -15,5 +15,11 @@ namespace BricsSocial.Domain.Entities
 
         public int ResumeReplyId { get; set; }
         public ResumeReply ResumeReply { get; set; }
+
+        public static class Invariants
+        {
+            public const int MessageMinLength = 2;
+            public const int MessageMaxLength = 1500;
+        }
     }
 }

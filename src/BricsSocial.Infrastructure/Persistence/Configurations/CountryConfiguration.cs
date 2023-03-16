@@ -14,7 +14,7 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Country> builder)
         {
             builder.Property(c => c.Name)
-                .HasMaxLength(100)
+                .HasMaxLength(Country.Invariants.NameMaxLength)
                 .IsRequired();
         }
     }

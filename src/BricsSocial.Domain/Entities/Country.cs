@@ -12,5 +12,11 @@ namespace BricsSocial.Domain.Entities
 
         public List<Specialist> Specialists { get; set; }
         public List<Company> Companies { get; set; }
+
+        public static class Invariants
+        {
+            public const int NameMinLength = 2;
+            public const int NameMaxLength = 200;
+        }
     }
 }

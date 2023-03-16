@@ -15,7 +15,7 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<FriendRequest> builder)
         {
             builder.Property(f => f.Message)
-                .HasMaxLength(1500)
+                .HasMaxLength(FriendRequest.Invariants.MessageMaxLength)
                 .IsRequired();
         }
     }

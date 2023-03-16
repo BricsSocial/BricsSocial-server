@@ -1,9 +1,10 @@
 using BricsSocial.Api.Swagger;
-using BricsSocial.Application.Vacancies.Commands.CreateVacancy;
-using BricsSocial.Application.Vacancies.Commands.DeleteVacancy;
-using BricsSocial.Application.Vacancies.Queries.Dtos;
-using BricsSocial.Application.Vacancies.Queries.GetCompanyVacancies;
+using BricsSocial.Application.Vacancies.CreateVacancy;
+using BricsSocial.Application.Vacancies.DeleteVacancy;
+using BricsSocial.Application.Vacancies.Dtos;
+using BricsSocial.Application.Vacancies.GetCompanyVacancies;
 using BricsSocial.Domain.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BricsSocial.Api.Controllers
@@ -11,18 +12,23 @@ namespace BricsSocial.Api.Controllers
     public class VacanciesController : ApiControllerBase
     {
         [HttpPost]
-        public async Task<int> CreateVacancy(CreateVacancyCommand command)
+        public async Task<ActionResult<int>> Create(CreateVacancyCommand command)
         {
-            return await Mediator.Send(command);
+            return Ok(await Mediator.Send(command));
         }
 
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<VacancyDto>> GetVacancy(int id)
+        //{
+        //    return Created(await Mediator.Send());
+        //}
+
         [HttpDelete("{id}")]
-        public async Task<int> DeleteVacancy(int id)
+        public async Task<IActionResult> DeleteVacancy(int id)
         {
-            return await Mediator.Send(new DeleteVacancyCommand
-            {
-                VacancyId = id
-            });
+            await Mediator.Send(new DeleteVacancyCommand { Id = id });
+
+            return NoContent();
         }
 
         [HttpGet("company/{companyId}")]

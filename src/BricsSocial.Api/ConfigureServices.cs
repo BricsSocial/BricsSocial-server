@@ -81,6 +81,8 @@ namespace BricsSocial.Api
                 //s.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
                 //s.OperationFilter<AppendAuthorizeToSummaryOperationFilter<AuthorizeAttribute>>();
                 s.OperationFilter<AppendCustomAuthorizeToSummaryOperationFilter>();
+
+                //s.DocumentFilter<>();
             });
             
             services.TryAddTransient<IValidatorFactory, ServiceProviderValidatorFactory>(); // update

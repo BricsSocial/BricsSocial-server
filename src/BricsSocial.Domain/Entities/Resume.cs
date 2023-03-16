@@ -15,5 +15,13 @@ namespace BricsSocial.Domain.Entities
         public Specialist Specialist { get; set; }
 
         public List<ResumeReply> ResumeReplies { get; set; }
+
+        public static class Invariants
+        {
+            public const int SkillsMinLength = 1;
+            public const int SkillsMaxLength = 10000;
+            public const int ExperienceMinLength = 1;
+            public const int ExperienceMaxLength = 10000;
+        }
     }
 }

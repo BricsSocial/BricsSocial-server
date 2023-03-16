@@ -14,16 +14,28 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Specialist> builder)
         {
-            builder.HasOne<ApplicationUser>().WithOne().HasForeignKey<Specialist>(a => a.IdentityId);
-            builder.HasOne(s => s.Resume).WithOne(r => r.Specialist).HasForeignKey<Resume>(r => r.SpecialistId);
-            builder.HasMany(s => s.FromFriendRequests).WithOne(f => f.FromSpecialist);//.HasForeignKey(f => f.FromSpecialistId);
-            builder.HasMany(s => s.ToFriendRequests).WithOne(f => f.ToSpecialist);//.HasForeignKey(f => f.ToSpecialistId);
+            builder.HasOne<ApplicationUser>().WithOne().HasForeignKey<Specialist>(s => s.IdentityId);
             builder.Property(s => s.IdentityId)
                 .IsRequired();
-            builder.Property(s => s.About)
-                .HasMaxLength(1500);
+            builder.Property(s => s.Email)
+                .IsRequired();
+            builder.Property(s => s.FirstName)
+                .HasMaxLength(Specialist.Invariants.FirstNameMaxLength)
+                .IsRequired();
+            builder.Property(s => s.LastName)
+                .HasMaxLength(Specialist.Invariants.LastNameMaxLength)
+                .IsRequired();
+            
+            builder.Property(s => s.ShortBio)
+                .HasMaxLength(Specialist.Invariants.ShortBioMaxLength);
+            builder.Property(s => s.LongBio)
+                .HasMaxLength(Specialist.Invariants.LongBioMaxLength);
             builder.Property(c => c.Photo)
                 .HasMaxLength(100_000);
+
+            builder.HasOne(s => s.Resume).WithOne(r => r.Specialist).HasForeignKey<Resume>(r => r.SpecialistId);
+            builder.HasMany(s => s.FromFriendRequests).WithOne(f => f.FromSpecialist);
+            builder.HasMany(s => s.ToFriendRequests).WithOne(f => f.ToSpecialist);
         }
     }
 }

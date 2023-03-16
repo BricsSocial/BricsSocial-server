@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Domain.Entities
 {
-    public sealed class Specialist : EntityBase
+    public sealed class Specialist : UserBase
     {
-        public string IdentityId { get; set; }
-
-        public string About { get; set; }
+        public string? ShortBio { get; set; }
+        public string? LongBio { get; set; }
         public string? Photo { get; set; }
 
         public int CountryId { get; set; }
@@ -21,5 +20,17 @@ namespace BricsSocial.Domain.Entities
 
         public List<FriendRequest> FromFriendRequests { get; set; }
         public List<FriendRequest> ToFriendRequests { get; set; }
+
+        public static class Invariants
+        {
+            public const int FirstNameMinLength = 2;
+            public const int FirstNameMaxLength = 100;
+            public const int LastNameMinLength = 2;
+            public const int LastNameMaxLength = 100;
+            public const int ShortBioMinLength = 1;
+            public const int ShortBioMaxLength = 70;
+            public const int LongBioMinLength = 1;
+            public const int LongBioMaxLength = 3000;
+        }
     }
 }

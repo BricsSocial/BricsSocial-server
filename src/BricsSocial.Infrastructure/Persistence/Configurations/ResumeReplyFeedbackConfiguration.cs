@@ -14,7 +14,7 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<ResumeReplyFeedback> builder)
         {
             builder.Property(r => r.Message)
-                 .HasMaxLength(1500)
+                 .HasMaxLength(ResumeReplyFeedback.Invariants.MessageMaxLength)
                  .IsRequired();
         }
     }

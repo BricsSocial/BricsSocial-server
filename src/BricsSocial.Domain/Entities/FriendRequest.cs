@@ -15,5 +15,11 @@ namespace BricsSocial.Domain.Entities
 
         public int ToSpecialistId { get; set; }
         public Specialist ToSpecialist { get; set; }
+
+        public static class Invariants
+        {
+            public const int MessageMinLength = 2;
+            public const int MessageMaxLength = 1500;
+        }
     }
 }

@@ -26,8 +26,22 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("IdentityId")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Photo")
@@ -59,7 +73,7 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(3000)
+                        .HasMaxLength(10000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Logo")
@@ -68,7 +82,7 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -86,7 +100,7 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -128,12 +142,12 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Experience")
                         .IsRequired()
-                        .HasMaxLength(1500)
+                        .HasMaxLength(10000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Skills")
                         .IsRequired()
-                        .HasMaxLength(1500)
+                        .HasMaxLength(10000)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SpecialistId")
@@ -208,16 +222,29 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("About")
-                        .IsRequired()
-                        .HasMaxLength(1500)
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("CountryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("IdentityId")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LongBio")
+                        .HasMaxLength(3000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Photo")
@@ -226,6 +253,10 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.Property<int?>("ResumeId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ShortBio")
+                        .HasMaxLength(70)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -248,17 +279,17 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Offerings")
                         .IsRequired()
-                        .HasMaxLength(1500)
+                        .HasMaxLength(10000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Requirements")
                         .IsRequired()
-                        .HasMaxLength(1500)
+                        .HasMaxLength(10000)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -344,14 +375,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");

@@ -14,10 +14,10 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Resume> builder)
         {
             builder.Property(r => r.Skills)
-                .HasMaxLength(1500)
+                .HasMaxLength(Resume.Invariants.SkillsMaxLength)
                 .IsRequired();
             builder.Property(r => r.Experience)
-                .HasMaxLength(1500)
+                .HasMaxLength(Resume.Invariants.ExperienceMaxLength)
                 .IsRequired();
         }
     }

@@ -17,5 +17,14 @@ namespace BricsSocial.Domain.Entities
 
         public List<Agent> Agents { get; set; }
         public List<Vacancy> Vacancies { get; set; }
+
+
+        public static class Invariants
+        {
+            public const int NameMinLength = 2;
+            public const int NameMaxLength = 200;
+            public const int DescriptionMinLength = 1;
+            public const int DescriptionMaxLength = 10000;
+        }
     }
 }

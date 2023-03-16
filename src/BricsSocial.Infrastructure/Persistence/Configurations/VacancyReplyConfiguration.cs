@@ -14,7 +14,7 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<VacancyReply> builder)
         {
             builder.Property(v => v.Message)
-               .HasMaxLength(1500)
+               .HasMaxLength(VacancyReply.Invariants.MessageMaxLength)
                .IsRequired();
         }
     }

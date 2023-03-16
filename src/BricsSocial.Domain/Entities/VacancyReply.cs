@@ -16,5 +16,11 @@ namespace BricsSocial.Domain.Entities
         public Vacancy Vacancy { get; set; }
 
         public List<VacancyReplyFeedback> Feedbacks { get; set; }
+
+        public static class Invariants
+        {
+            public const int MessageMinLength = 2;
+            public const int MessageMaxLength = 1500;
+        }
     }
 }

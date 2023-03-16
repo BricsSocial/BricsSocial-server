@@ -146,9 +146,7 @@ namespace BricsSocial.Infrastructure.Persistence
             var agentUser = new ApplicationUser
             {
                 UserName = "agent@gazprom",
-                Email = "agent@gazprom",
-                FirstName = "Ivan",
-                LastName = "Ivanov",
+                Email = "agent@gazprom"
             };
             if (_userManager.Users.All(u => u.Email != agentUser.Email))
             {
@@ -159,6 +157,9 @@ namespace BricsSocial.Infrastructure.Persistence
             var createdAgentUser = _userManager.Users.Where(u => u.Email == agentUser.Email).First();
             var agent = new Agent
             {
+                Email = agentUser.Email,
+                FirstName = "Ivan",
+                LastName = "Ivanov",
                 IdentityId = createdAgentUser.Id,
                 Position = "HR manager",
                 CompanyId = company.Id
