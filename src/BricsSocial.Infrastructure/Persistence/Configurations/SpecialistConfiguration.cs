@@ -31,7 +31,8 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
             builder.Property(s => s.LongBio)
                 .HasMaxLength(Specialist.Invariants.LongBioMaxLength);
             builder.Property(c => c.Photo)
-                .HasMaxLength(100_000);
+                .HasMaxLength(Specialist.Invariants.PhotoMaxLength)
+                .IsRequired(false);
 
             builder.HasOne(s => s.Resume).WithOne(r => r.Specialist).HasForeignKey<Resume>(r => r.SpecialistId);
             builder.HasMany(s => s.FromFriendRequests).WithOne(f => f.FromSpecialist);

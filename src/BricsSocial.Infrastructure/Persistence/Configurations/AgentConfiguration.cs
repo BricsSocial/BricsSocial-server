@@ -25,10 +25,12 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
             builder.Property(a => a.LastName)
                 .HasMaxLength(Agent.Invariants.LastNameMaxLength)
                 .IsRequired();
-
             builder.Property(a => a.Position)
                 .HasMaxLength(Agent.Invariants.PositionMaxLength)
                 .IsRequired();
+            builder.Property(a => a.Photo)
+                .HasMaxLength(Agent.Invariants.PhotoMaxLength)
+                .IsRequired(false);
         }
     }
 }

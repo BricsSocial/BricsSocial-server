@@ -45,6 +45,7 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Photo")
+                        .HasMaxLength(2097152)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Position")
@@ -77,7 +78,7 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Logo")
-                        .HasMaxLength(100000)
+                        .HasMaxLength(2097152)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -248,7 +249,7 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Photo")
-                        .HasMaxLength(100000)
+                        .HasMaxLength(2097152)
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ResumeId")

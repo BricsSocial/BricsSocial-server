@@ -1,16 +1,17 @@
 ﻿using BricsSocial.Application.Common.Exceptions;
+using BricsSocial.Application.Common.Exceptions.Application;
+using BricsSocial.Application.Common.Exceptions.Common;
 using BricsSocial.Application.Common.Interfaces;
 using BricsSocial.Application.Common.Security;
-using BricsSocial.Application.Vacancies.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BricsSocial.Application.Vacancies.DeleteVacancy
 {
-    [Authorize(Roles = UserRoles.Agent)]
+    [Authorize(Roles = UserRoles.AdministratorAndAgent)]
     public record DeleteVacancyCommand : IRequest
     {
-        public int? Id { get; set; }
+        public int? Id { get; init; }
     }
 
     public sealed class DeleteVacancyCommandHandler : IRequestHandler<DeleteVacancyCommand>
@@ -26,14 +27,6 @@ namespace BricsSocial.Application.Vacancies.DeleteVacancy
 
         public async Task Handle(DeleteVacancyCommand request, CancellationToken cancellationToken)
         {
-            var userId = _currentUser.UserId;
-            var agent = await _context.Agents
-                .Where(a => a.IdentityId == userId)
-                .FirstOrDefaultAsync();
-
-            if (agent is null)
-                throw new AgentUserNotFound(userId);
-
             var vacancy = await _context.Vacancies
                 .Where(v => v.Id == request.Id)
                 .FirstOrDefaultAsync();
@@ -41,8 +34,20 @@ namespace BricsSocial.Application.Vacancies.DeleteVacancy
             if (vacancy is null)
                 throw new NotFoundException(nameof(vacancy), request.Id);
 
-            if (agent.CompanyId != vacancy.CompanyId)
-                throw new AgentBelongsToOtherCompanyException(agent.Id, agent.CompanyId, vacancy.CompanyId);
+            if(_currentUser.Role == UserRoles.Agent)
+            {
+                var userId = _currentUser.UserId;
+
+                var agent = await _context.Agents
+                    .Where(a => a.IdentityId == userId)
+                    .FirstOrDefaultAsync();
+
+                if (agent is null)
+                    throw new AgentUserNotFound(userId);
+
+                if (agent.CompanyId != vacancy.CompanyId)
+                    throw new AgentBelongsToOtherCompanyException(agent.Id, agent.CompanyId, vacancy.CompanyId);
+            }
 
             _context.Vacancies.Remove(vacancy);
 

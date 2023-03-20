@@ -20,7 +20,8 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
                 .HasMaxLength(Company.Invariants.DescriptionMaxLength)
                 .IsRequired();
             builder.Property(c => c.Logo)
-                .HasMaxLength(100_000);
+                .HasMaxLength(Company.Invariants.LogoMaxLength)
+                .IsRequired(false);
         }
     }
 }

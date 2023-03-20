@@ -1,4 +1,5 @@
-﻿using BricsSocial.Application.Common.Interfaces;
+﻿using BricsSocial.Application.Common.Exceptions.Common;
+using BricsSocial.Application.Common.Interfaces;
 using MediatR;
 
 namespace BricsSocial.Application.Auth.Login
@@ -23,7 +24,7 @@ namespace BricsSocial.Application.Auth.Login
         {
             var userInfo = await _identityService.GetUserInfoByEmailAsync(request.Email);
             if (userInfo == null)
-                throw new Exception($"User with email '{request.Email}' not existing!");
+                throw new NotFoundException("User", request.Email);
 
             var checkPassword = await _identityService.CheckPasswordAsync(request.Email, request.Password);
 

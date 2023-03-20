@@ -4,29 +4,34 @@ using BricsSocial.Application.Common.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using BricsSocial.Application.Common.Exceptions;
+using BricsSocial.Application.Common.Exceptions.Application;
+using BricsSocial.Application.Vacancies.Common;
+using AutoMapper;
 
 namespace BricsSocial.Application.Vacancies.CreateVacancy
 {
     [Authorize(Roles = UserRoles.Agent)]
-    public record CreateVacancyCommand : IRequest<int>
+    public record CreateVacancyCommand : IRequest<VacancyDto>
     {
-        public string? Name { get; set; }
-        public string? Requirements { get; set; }
-        public string? Offerings { get; set; }
+        public string? Name { get; init; }
+        public string? Requirements { get; init; }
+        public string? Offerings { get; init; }
     }
 
-    public sealed class CreateVacancyCommandHandler : IRequestHandler<CreateVacancyCommand, int>
+    public sealed class CreateVacancyCommandHandler : IRequestHandler<CreateVacancyCommand, VacancyDto>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUser;
 
-        public CreateVacancyCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+        public CreateVacancyCommandHandler(IApplicationDbContext context, IMapper mapper, ICurrentUserService currentUser)
         {
             _context = context;
+            _mapper = mapper;
             _currentUser = currentUser;
         }
 
-        public async Task<int> Handle(CreateVacancyCommand request, CancellationToken cancellationToken)
+        public async Task<VacancyDto> Handle(CreateVacancyCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.UserId;
             var agent = await _context.Agents
@@ -37,7 +42,6 @@ namespace BricsSocial.Application.Vacancies.CreateVacancy
                 throw new AgentUserNotFound(userId);
 
             var vacancy = new Vacancy();
-
             vacancy.Name = request.Name;
             vacancy.Requirements = request.Requirements;
             vacancy.Offerings = request.Offerings;
@@ -47,7 +51,7 @@ namespace BricsSocial.Application.Vacancies.CreateVacancy
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return vacancy.Id;
+            return _mapper.Map<VacancyDto>(vacancy);
         }
     }
 

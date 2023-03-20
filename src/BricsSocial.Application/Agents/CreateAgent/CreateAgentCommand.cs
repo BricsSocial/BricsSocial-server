@@ -13,15 +13,17 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Application.Agents.RegisterAgent
 {
+    [Authorize(Roles = UserRoles.Administrator)]
     public record CreateAgentCommand : IRequest<AgentDto>
     {
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
+        public string? FirstName { get; init; }
+        public string? LastName { get; init; }
+        public string? Email { get; init; }
+        public string? Password { get; init; }
 
-        public string? Position { get; set; }
-        public int? CompanyId { get; set; }
+        public string? Position { get; init; }
+        public string? Photo { get; init; }
+        public int? CompanyId { get; init; }
     }
 
     public sealed class CreateAgentCommandHandler : IRequestHandler<CreateAgentCommand, AgentDto>
@@ -58,6 +60,7 @@ namespace BricsSocial.Application.Agents.RegisterAgent
                 LastName = request.LastName,
                 IdentityId = userId,
                 Position = request.Position,
+                Photo = request.Photo,
                 CompanyId = request.CompanyId.Value,
             };
             _context.Agents.Add(agent);

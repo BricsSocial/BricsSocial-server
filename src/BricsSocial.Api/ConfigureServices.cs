@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.ComponentModel;
@@ -46,7 +47,7 @@ namespace BricsSocial.Api
             services.AddSwaggerGen(s =>
             {
                 s.SwaggerDoc("v1", new OpenApiInfo() { Title = "BricsSocial API", Version = "v1" });
-                s.CustomSchemaIds(x => x.GetCustomAttributes(false).OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
+                //s.CustomSchemaIds(x => x.GetCustomAttributes(false).OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
 
                 //s.ExampleFilters();
 
@@ -82,7 +83,9 @@ namespace BricsSocial.Api
                 //s.OperationFilter<AppendAuthorizeToSummaryOperationFilter<AuthorizeAttribute>>();
                 s.OperationFilter<AppendCustomAuthorizeToSummaryOperationFilter>();
 
-                //s.DocumentFilter<>();
+                s.DocumentFilter<SwaggerEnumDescriptionDocumentFilter>();
+
+                s.CustomSchemaIds(CustomSchemaIdGenerator.ConstructSchemaId);
             });
             
             services.TryAddTransient<IValidatorFactory, ServiceProviderValidatorFactory>(); // update

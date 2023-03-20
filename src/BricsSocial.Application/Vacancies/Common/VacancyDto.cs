@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Application.Vacancies.Common
 {
-    internal class VacancyDto
+    public sealed class VacancyDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Requirements { get; set; }
         public string Offerings { get; set; }
-        public int Status { get; set; }
+        public VacancyStatus Status { get; set; }
 
         public int CompanyId { get; set; }
     }

@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using BricsSocial.Application.Agents.Common;
 using BricsSocial.Application.Common.Exceptions;
+using BricsSocial.Application.Common.Exceptions.Common;
 using BricsSocial.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace BricsSocial.Application.Agents.GetAgent
 {
     public record GetAgentQuery : IRequest<AgentDto>
     {
-        public int Id { get; set; }
+        public int? Id { get; init; }
     }
 
     public record GetAgentQueryHandler : IRequestHandler<GetAgentQuery, AgentDto>

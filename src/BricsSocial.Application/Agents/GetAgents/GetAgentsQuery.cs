@@ -16,7 +16,7 @@ namespace BricsSocial.Application.Agents.GetAgents
 {
     public sealed class GetAgentsQuery : PageQuery, IRequest<PaginatedList<AgentDto>>
     {
-        public int? CompanyId { get; set; }
+        public int? CompanyId { get; init; }
     }
 
     public sealed class GetAgentsQueryhandler : IRequestHandler<GetAgentsQuery, PaginatedList<AgentDto>>
@@ -33,7 +33,7 @@ namespace BricsSocial.Application.Agents.GetAgents
         public async Task<PaginatedList<AgentDto>> Handle(GetAgentsQuery request, CancellationToken cancellationToken)
         {
             var agents = await _context.Agents
-                .Where(a => request.CompanyId != null ? a.CompanyId == request.CompanyId : true)
+                .Where(a => request.CompanyId == null || a.CompanyId == request.CompanyId)
                 .ProjectTo<AgentDto>(_mapper.ConfigurationProvider)
                 .OrderBy(a => a.Id)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);

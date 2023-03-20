@@ -31,6 +31,8 @@ namespace BricsSocial.Domain.Entities
             public const int ShortBioMaxLength = 70;
             public const int LongBioMinLength = 1;
             public const int LongBioMaxLength = 3000;
+            public const int PhotoMinLength = 1;
+            public const int PhotoMaxLength = 2 << 20;
         }
     }
 }

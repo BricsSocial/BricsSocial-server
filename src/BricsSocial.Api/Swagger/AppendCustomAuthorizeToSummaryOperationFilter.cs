@@ -73,7 +73,8 @@ namespace BricsSocial.Api.Swagger
         private void AppendPolicies(IEnumerable<T> authorizeAttributes, StringBuilder authorizationDescription, PolicySelectorWithLabel<T> policySelector)
         {
             var policies = policySelector.Selector(authorizeAttributes)
-                .OrderBy(policy => policy);
+                .OrderBy(policy => policy)
+                .Select(policy => policy.Replace(",", ", "));
 
             if (policies.Any())
             {

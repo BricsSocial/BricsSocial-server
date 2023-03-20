@@ -45,7 +45,7 @@ namespace BricsSocial.Infrastructure.Authentication
                 _jwtOptions.Audience,
                 claims,
                 null,
-                loginTime.AddHours(1),
+                loginTime.AddDays(30),
                 signingCredentials
                 );
 

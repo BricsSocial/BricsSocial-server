@@ -25,6 +25,8 @@ namespace BricsSocial.Domain.Entities
             public const int NameMaxLength = 200;
             public const int DescriptionMinLength = 1;
             public const int DescriptionMaxLength = 10000;
+            public const int LogoMinLength = 1;
+            public const int LogoMaxLength = 2 << 20;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using BricsSocial.Application.Common.Exceptions;
+using BricsSocial.Application.Common.Exceptions.Common;
 using BricsSocial.Application.Common.Interfaces;
 using BricsSocial.Application.Common.Security;
 using MediatR;
@@ -20,7 +21,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
     {
         var authorizeAttributes = request.GetType().GetCustomAttributes<AuthorizeAttribute>();
 
-        if (authorizeAttributes.Any() && _currentUserService.Role != UserRoles.Administrator)
+        if (authorizeAttributes.Any())
         {
             // Must be authenticated user
             if (_currentUserService.UserId == null)
