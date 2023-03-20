@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BricsSocial.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230320075348_Initial")]
+    [Migration("20230320120004_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -233,6 +233,9 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("SkillTags");
                 });
 
@@ -270,9 +273,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.Property<string>("Photo")
                         .HasMaxLength(2097152)
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("ResumeId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ShortBio")
                         .HasMaxLength(70)

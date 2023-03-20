@@ -230,6 +230,9 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("SkillTags");
                 });
 
@@ -267,9 +270,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.Property<string>("Photo")
                         .HasMaxLength(2097152)
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("ResumeId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ShortBio")
                         .HasMaxLength(70)

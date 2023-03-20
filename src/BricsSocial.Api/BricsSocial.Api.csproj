@@ -31,4 +31,8 @@
 		<ProjectReference Include="..\BricsSocial.Infrastructure\BricsSocial.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="swagger tofile --output $(SolutionDir)docs\swagger-specification.json $(TargetDir)$(ProjectName).dll v1" />
+	</Target>
+
 </Project>

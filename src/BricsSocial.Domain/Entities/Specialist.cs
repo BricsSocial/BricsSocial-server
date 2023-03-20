@@ -15,7 +15,6 @@ namespace BricsSocial.Domain.Entities
         public int CountryId { get; set; }
         public Country Country { get; set; }
 
-        public int? ResumeId { get; set; }
         public Resume? Resume { get; set; }
 
         public List<FriendRequest> FromFriendRequests { get; set; } = new List<FriendRequest>();

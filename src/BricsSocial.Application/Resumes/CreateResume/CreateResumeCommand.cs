@@ -41,14 +41,15 @@ namespace BricsSocial.Application.Resumes.CreateResume
         {
             var userId = _currentUser.UserId;
             var specialist = await _context.Specialists
+                .Include(s => s.Resume)
                 .Where(s => s.IdentityId == userId)
                 .FirstOrDefaultAsync();
 
             if (specialist is null)
                 throw new SpecialistUserNotFound(userId);
 
-            if (specialist.ResumeId != null)
-                throw new ResumeAlreadyExists(specialist.Id, specialist.ResumeId.Value);
+            if (specialist.Resume != null)
+                throw new ResumeAlreadyExists(specialist.Id, specialist.Resume.Id);
 
             var resume = new Resume();
             resume.Skills = request.Skills;

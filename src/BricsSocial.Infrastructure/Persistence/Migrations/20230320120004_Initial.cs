@@ -214,7 +214,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     LongBio = table.Column<string>(type: "TEXT", maxLength: 3000, nullable: true),
                     Photo = table.Column<string>(type: "TEXT", maxLength: 2097152, nullable: true),
                     CountryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ResumeId = table.Column<int>(type: "INTEGER", nullable: true),
                     IdentityId = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
@@ -589,6 +588,12 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 name: "IX_ResumeSkillTag_SkillTagsId",
                 table: "ResumeSkillTag",
                 column: "SkillTagsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SkillTags_Name",
+                table: "SkillTags",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SkillTagVacancy_VacanciesId",

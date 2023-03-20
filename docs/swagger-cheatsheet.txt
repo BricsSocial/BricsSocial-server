@@ -1,0 +1,1 @@
+swagger tofile --output ..\docs\swagger-specification.json $(TargetDir)$(ProjectName).dll v1

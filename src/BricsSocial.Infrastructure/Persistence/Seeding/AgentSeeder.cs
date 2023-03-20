@@ -40,38 +40,38 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
                 ("Ivan", "Ivanov", "HR manager"),
             };
 
-            var sberAgentData = new List<(string, string, string)>
+            var sberAgentsData = new List<(string, string, string)>
             {
                 ("Semen", "Karpov", "SCRUM master"),
                 ("Dmitry", "Lyadov", "HR manager"),
             };
 
-            var yandexAgentData = new List<(string, string, string)>
+            var yandexAgentsData = new List<(string, string, string)>
             {
                 ("Andrew", "Novikov", "HR lead"),
                 ("Mike", "Kravetz", "HR manager"),
             };
 
-            var huaweiAgentData = new List<(string, string, string)>
+            var huaweiAgentsData = new List<(string, string, string)>
             {
                 ("Meng", "Tao", "HR"),
             };
 
             await AddCompanyAgents(gazprom, gazpromAgentData);
-            await AddCompanyAgents(sber, sberAgentData);
-            await AddCompanyAgents(yandex, yandexAgentData);
-            await AddCompanyAgents(huawei, huaweiAgentData);
+            await AddCompanyAgents(sber, sberAgentsData);
+            await AddCompanyAgents(yandex, yandexAgentsData);
+            await AddCompanyAgents(huawei, huaweiAgentsData);
         }
 
-        private async Task AddCompanyAgents(Company company, List<(string, string, string)> agentData)
+        private async Task AddCompanyAgents(Company company, List<(string, string, string)> agentsData)
         {
             var password = "Agent123!";
 
-            foreach (var data in agentData)
+            foreach (var agentData in agentsData)
             {
-                var firstName = data.Item1;
-                var lastName = data.Item2;
-                var position = data.Item3;
+                var firstName = agentData.Item1;
+                var lastName = agentData.Item2;
+                var position = agentData.Item3;
 
                 var email = $"{firstName.ToLower()[0]}.{lastName.ToLower()}@{company.Name.ToLower()}";
 

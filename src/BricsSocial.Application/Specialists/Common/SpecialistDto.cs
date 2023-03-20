@@ -19,6 +19,5 @@ namespace BricsSocial.Application.Specialists.Common
         public string? Photo { get; set; }
 
         public int CountryId { get; set; }
-        public int? ResumeId { get; set; }
     }
 }

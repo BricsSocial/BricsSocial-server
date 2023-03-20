@@ -17,6 +17,8 @@ namespace BricsSocial.Application.Resumes.GetResumes
 {
     public sealed class GetResumesQuery : PageQuery, IRequest<PaginatedList<ResumeDto>>
     {
+        public int? SpecialistId { get; init; }
+
         public int? CountryId { get; init; }
 
         public List<int>? SkillTagsIds { get; init; }
@@ -38,6 +40,7 @@ namespace BricsSocial.Application.Resumes.GetResumes
             var skillTagsSet = request.SkillTagsIds?.ToHashSet() ?? new HashSet<int>();
             var resumes = await _context.Resumes
                 .AsNoTracking()
+                .Where(r => request.SpecialistId == null || r.SpecialistId == request.SpecialistId)
                 .Where(r => request.CountryId == null || r.Specialist.CountryId == request.CountryId)
                 .Where(r => request.SkillTagsIds == null || r.SkillTags.Any(s => skillTagsSet.Contains(s.Id)))
                 .OrderBy(r => r.Id)
