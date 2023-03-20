@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Application.Common.Exceptions.Application
 {
-    public sealed class AgentBelongsToOtherCompanyException : Exception
+    public sealed class AgentBelongsToOtherCompany : Exception
     {
-        public AgentBelongsToOtherCompanyException(object agentId, object agentCompanyId, object expectedCompanyId) // TODO: typed ids
+        public AgentBelongsToOtherCompany(object agentId, object agentCompanyId, object expectedCompanyId) // TODO: typed ids
             : base($"Agent belongs to other company than expected (agent = {agentId}, agent company = {agentCompanyId}, expected company = {expectedCompanyId})")
         {
         }

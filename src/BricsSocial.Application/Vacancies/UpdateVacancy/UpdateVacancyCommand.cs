@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BricsSocial.Application.Agents.Services;
 using BricsSocial.Application.Common.Exceptions.Application;
 using BricsSocial.Application.Common.Exceptions.Common;
 using BricsSocial.Application.Common.Interfaces;
@@ -19,6 +20,7 @@ namespace BricsSocial.Application.Vacancies.UpdateVacancy
         public string? Requirements { get; init; }
         public string? Offerings { get; init; }
         public VacancyStatus? Status { get; init; }
+        public List<int>? SkillTagsIds { get; init; }
     }
 
     public sealed class UpdateVacancyCommandHandler : IRequestHandler<UpdateVacancyCommand, VacancyDto>
@@ -26,33 +28,27 @@ namespace BricsSocial.Application.Vacancies.UpdateVacancy
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUser;
         private readonly IMapper _mapper;
+        private readonly IAgentService _agentService;
 
-        public UpdateVacancyCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IMapper mapper)
+        public UpdateVacancyCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IMapper mapper, IAgentService agentService)
         {
             _context = context;
             _currentUser = currentUser;
             _mapper = mapper;
+            _agentService = agentService;
         }
 
         public async Task<VacancyDto> Handle(UpdateVacancyCommand request, CancellationToken cancellationToken)
         {
-            var userId = _currentUser.UserId!;
-            var agent = await _context.Agents
-                .Where(a => a.IdentityId == userId)
-                .FirstOrDefaultAsync();
-
-            if (agent is null)
-                throw new AgentUserNotFound(userId);
-
             var vacancy = await _context.Vacancies
                 .Where(v => v.Id == request.Id)
+                .Include(v => v.SkillTags)
                 .FirstOrDefaultAsync();
 
             if (vacancy is null)
                 throw new NotFoundException(nameof(vacancy), request.Id!);
 
-            if (agent.CompanyId != vacancy.CompanyId)
-                throw new AgentBelongsToOtherCompanyException(agent.Id, agent.CompanyId, vacancy.CompanyId);
+            await _agentService.CheckAgentBelongsToCompany(_currentUser.UserId, vacancy.CompanyId);
 
             if (request.Name != null)
                 vacancy.Name = request.Name;
@@ -62,6 +58,13 @@ namespace BricsSocial.Application.Vacancies.UpdateVacancy
                 vacancy.Offerings = request.Offerings;
             if(request.Status != null)
                 vacancy.Status = request.Status.Value;
+
+            if (request.SkillTagsIds != null)
+            {
+                var skillTags = _context.SkillTags.Where(s => request.SkillTagsIds.Contains(s.Id));
+
+                vacancy.SkillTags = await skillTags.ToListAsync();
+            }
 
             _context.Vacancies.Update(vacancy);
 

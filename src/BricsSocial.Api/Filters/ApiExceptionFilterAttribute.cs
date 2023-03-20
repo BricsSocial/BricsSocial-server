@@ -21,7 +21,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
 
                 // Application
-                { typeof(AgentBelongsToOtherCompanyException), HandleForbiddenAccessException },
+                { typeof(AgentBelongsToOtherCompany), HandleForbiddenAccessException },
             };
     }
 

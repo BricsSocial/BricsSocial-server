@@ -15,8 +15,8 @@ namespace BricsSocial.Domain.Entities
         public int CountryId { get; set; }
         public Country Country { get; set; }
 
-        public List<Agent> Agents { get; set; }
-        public List<Vacancy> Vacancies { get; set; }
+        public List<Agent> Agents { get; set; } = new List<Agent>();
+        public List<Vacancy> Vacancies { get; set; } = new List<Vacancy>();
 
 
         public static class Invariants

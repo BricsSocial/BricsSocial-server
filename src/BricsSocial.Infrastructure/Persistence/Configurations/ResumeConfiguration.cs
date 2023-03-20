@@ -19,6 +19,7 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
             builder.Property(r => r.Experience)
                 .HasMaxLength(Resume.Invariants.ExperienceMaxLength)
                 .IsRequired();
+            builder.HasMany(r => r.SkillTags).WithMany(s => s.Resumes);
         }
     }
 }

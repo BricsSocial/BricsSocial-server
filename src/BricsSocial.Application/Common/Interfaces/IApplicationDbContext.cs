@@ -5,9 +5,9 @@ namespace BricsSocial.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
+    DbSet<Country> Countries { get; }
     DbSet<Specialist> Specialists { get; }
     DbSet<Agent> Agents { get; }
-    DbSet<Country> Countries { get; }
     DbSet<Company> Companies { get; }
 
     DbSet<Vacancy> Vacancies { get; }
@@ -19,6 +19,8 @@ public interface IApplicationDbContext
     DbSet<ResumeReplyFeedback> ResumeReplyFeedbacks { get; }
 
     DbSet<FriendRequest> FriendRequests { get; }
+
+    DbSet<SkillTag> SkillTags { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

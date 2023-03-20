@@ -22,6 +22,8 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
             builder.Property(t => t.Offerings)
                 .HasMaxLength(Vacancy.Invariants.OfferingsMaxLength)
                 .IsRequired();
+
+            builder.HasMany(v => v.SkillTags).WithMany(s => s.Vacancies);
         }
     }
 }

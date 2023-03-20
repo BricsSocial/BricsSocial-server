@@ -21,6 +21,8 @@ namespace BricsSocial.Application.Vacancies.GetVacancies
         public int? CountryId { get; init; }
         public int? CompanyId { get; init; }
         public VacancyStatus? Status { get; init; }
+
+        public List<int>? SkillTagsIds { get; init; }
     }
 
     public sealed class GetVacanciesQueryHandler : IRequestHandler<GetVacanciesQuery, PaginatedList<VacancyDto>>
@@ -36,13 +38,15 @@ namespace BricsSocial.Application.Vacancies.GetVacancies
 
         public async Task<PaginatedList<VacancyDto>> Handle(GetVacanciesQuery request, CancellationToken cancellationToken)
         {
+            var skillTagsSet = request.SkillTagsIds?.ToHashSet() ?? new HashSet<int>();
             var vacancies = await _context.Vacancies
                 .AsNoTracking()
                 .Where(v => request.CompanyId == null || v.CompanyId == request.CompanyId)
                 .Where(v => request.CountryId == null || v.Company.CountryId == request.CountryId)
                 .Where(v => request.Status == null || v.Status == request.Status)
-                .ProjectTo<VacancyDto>(_mapper.ConfigurationProvider)
+                .Where(v => request.SkillTagsIds == null || v.SkillTags.Any(s => skillTagsSet.Contains(s.Id)))
                 .OrderBy(v => v.Id)
+                .ProjectTo<VacancyDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
 
             return vacancies;

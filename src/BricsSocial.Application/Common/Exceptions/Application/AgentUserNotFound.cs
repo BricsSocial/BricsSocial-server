@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BricsSocial.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace BricsSocial.Application.Common.Exceptions.Application
     public sealed class AgentUserNotFound : Exception
     {
         public AgentUserNotFound(string userId)
-            : base($"Agent not found for user {userId}.")
+            : base($"{nameof(Agent)} not found for user {userId}.")
         {
         }
     }

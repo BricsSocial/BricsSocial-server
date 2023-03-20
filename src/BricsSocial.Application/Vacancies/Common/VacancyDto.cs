@@ -1,4 +1,6 @@
-﻿using BricsSocial.Domain.Entities;
+﻿using BricsSocial.Application.Common.Mappings;
+using BricsSocial.Application.SkillTags.Common;
+using BricsSocial.Domain.Entities;
 using BricsSocial.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Application.Vacancies.Common
 {
-    public sealed class VacancyDto
+    public sealed class VacancyDto : IMapFrom<Vacancy>
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,5 +19,8 @@ namespace BricsSocial.Application.Vacancies.Common
         public VacancyStatus Status { get; set; }
 
         public int CompanyId { get; set; }
+
+        public List<SkillTagDto> SkillTags { get; set; }
+
     }
 }

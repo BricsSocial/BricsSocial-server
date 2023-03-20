@@ -33,7 +33,7 @@ namespace BricsSocial.Application.Countries.GetCountries
             var countries = await _context.Countries
                 .AsNoTracking()
                 .ProjectTo<CountryDto>(_mapper.ConfigurationProvider)
-                .OrderBy(v => v.Id)
+                .OrderBy(c => c.Id)
                 .ToListAsync();
 
             return countries;

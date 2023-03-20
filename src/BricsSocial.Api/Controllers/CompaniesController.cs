@@ -17,7 +17,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CompanyDto>> GetCompany(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<CompanyDto>> Get(int id, CancellationToken cancellationToken)
         {
             return Ok(await Mediator.Send(new GetCompanyQuery { Id = id }, cancellationToken));
         }
@@ -26,7 +26,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PaginatedList<CompanyDto>>> GetCompanies([FromQuery] GetCompaniesQuery request, CancellationToken cancellationToken)
+        public async Task<ActionResult<PaginatedList<CompanyDto>>> Get([FromQuery] GetCompaniesQuery request, CancellationToken cancellationToken)
         {
             return Ok(await Mediator.Send(request, cancellationToken));
         }
@@ -47,7 +47,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CompanyDto>> UpdateCompany(int id, UpdateCompanyCommand request, CancellationToken cancellationToken)
+        public async Task<ActionResult<CompanyDto>> Update(int id, UpdateCompanyCommand request, CancellationToken cancellationToken)
         {
             if (id != request.Id)
                 return BadRequest();
@@ -62,7 +62,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [RequestType(typeof(DeleteCompanyCommand))]
-        public async Task<IActionResult> DeleteCompany(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             await Mediator.Send(new DeleteCompanyCommand { Id = id }, cancellationToken);
 

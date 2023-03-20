@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BricsSocial.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230320004036_Initial")]
+    [Migration("20230320075348_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -218,6 +218,22 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.HasIndex("ResumeReplyId");
 
                     b.ToTable("ResumeReplyFeedbacks");
+                });
+
+            modelBuilder.Entity("BricsSocial.Domain.Entities.SkillTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SkillTags");
                 });
 
             modelBuilder.Entity("BricsSocial.Domain.Entities.Specialist", b =>
@@ -553,6 +569,36 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ResumeSkillTag", b =>
+                {
+                    b.Property<int>("ResumesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SkillTagsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ResumesId", "SkillTagsId");
+
+                    b.HasIndex("SkillTagsId");
+
+                    b.ToTable("ResumeSkillTag");
+                });
+
+            modelBuilder.Entity("SkillTagVacancy", b =>
+                {
+                    b.Property<int>("SkillTagsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VacanciesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("SkillTagsId", "VacanciesId");
+
+                    b.HasIndex("VacanciesId");
+
+                    b.ToTable("SkillTagVacancy");
+                });
+
             modelBuilder.Entity("BricsSocial.Domain.Entities.Agent", b =>
                 {
                     b.HasOne("BricsSocial.Domain.Entities.Company", "Company")
@@ -760,6 +806,36 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.HasOne("BricsSocial.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ResumeSkillTag", b =>
+                {
+                    b.HasOne("BricsSocial.Domain.Entities.Resume", null)
+                        .WithMany()
+                        .HasForeignKey("ResumesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BricsSocial.Domain.Entities.SkillTag", null)
+                        .WithMany()
+                        .HasForeignKey("SkillTagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SkillTagVacancy", b =>
+                {
+                    b.HasOne("BricsSocial.Domain.Entities.SkillTag", null)
+                        .WithMany()
+                        .HasForeignKey("SkillTagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BricsSocial.Domain.Entities.Vacancy", null)
+                        .WithMany()
+                        .HasForeignKey("VacanciesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

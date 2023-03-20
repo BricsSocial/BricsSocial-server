@@ -36,7 +36,7 @@ namespace BricsSocial.Application.Agents.Services
                 throw new AgentUserNotFound(userId);
 
             if (agent.CompanyId != companyId)
-                throw new AgentBelongsToOtherCompanyException(agent.Id, agent.CompanyId, companyId);
+                throw new AgentBelongsToOtherCompany(agent.Id, agent.CompanyId, companyId);
         }
     }
 }

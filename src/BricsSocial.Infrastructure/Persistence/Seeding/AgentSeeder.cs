@@ -1,4 +1,5 @@
-﻿using BricsSocial.Application.Common.Security;
+﻿using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Application.Common.Security;
 using BricsSocial.Domain.Entities;
 using BricsSocial.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +13,10 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
 {
     internal class AgentSeeder : ISeeder
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AgentSeeder(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AgentSeeder(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -97,7 +98,7 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
                 };
 
                 _context.Agents.Add(agent);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(default);
             }
         }
     }

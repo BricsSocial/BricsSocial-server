@@ -9,9 +9,9 @@ namespace BricsSocial.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
+        public DbSet<Country> Countries => Set<Country>();
         public DbSet<Specialist> Specialists => Set<Specialist>();
         public DbSet<Agent> Agents => Set<Agent>();
-        public DbSet<Country> Countries => Set<Country>();
         public DbSet<Company> Companies => Set<Company>();
         public DbSet<Vacancy> Vacancies => Set<Vacancy>();
         public DbSet<VacancyReply> VacancyReplies => Set<VacancyReply>();
@@ -20,6 +20,8 @@ namespace BricsSocial.Infrastructure.Persistence
         public DbSet<ResumeReply> ResumeReplies => Set<ResumeReply>();
         public DbSet<ResumeReplyFeedback> ResumeReplyFeedbacks => Set<ResumeReplyFeedback>();
         public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
+
+        public DbSet<SkillTag> SkillTags => Set<SkillTag>();
 
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options)

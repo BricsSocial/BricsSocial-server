@@ -26,7 +26,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AgentDto>> GetById(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<AgentDto>> Get(int id, CancellationToken cancellationToken)
         {
             return Ok(await Mediator.Send(new GetAgentQuery { Id = id }, cancellationToken));
         }
@@ -48,7 +48,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AgentDto>> UpdateAgent(int id, UpdateAgentCommand request, CancellationToken cancellationToken)
+        public async Task<ActionResult<AgentDto>> Update(int id, UpdateAgentCommand request, CancellationToken cancellationToken)
         {
             if (id != request.Id)
                 return BadRequest();
@@ -63,7 +63,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [RequestType(typeof(DeleteAgentCommand))]
-        public async Task<IActionResult> DeleteAgent(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             await Mediator.Send(new DeleteAgentCommand { Id = id }, cancellationToken);
 

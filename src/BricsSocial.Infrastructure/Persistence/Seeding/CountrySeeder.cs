@@ -1,4 +1,5 @@
-﻿using BricsSocial.Domain.Entities;
+﻿using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
 {
     internal class CountrySeeder : ISeeder
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
 
-        public CountrySeeder(ApplicationDbContext context)
+        public CountrySeeder(IApplicationDbContext context)
         {
             _context = context;
         }
@@ -32,7 +33,7 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
 
             _context.Countries.AddRange(countries);
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(default);
         }
     }
 }

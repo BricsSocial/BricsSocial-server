@@ -34,8 +34,8 @@ namespace BricsSocial.Application.Agents.GetAgents
         {
             var agents = await _context.Agents
                 .Where(a => request.CompanyId == null || a.CompanyId == request.CompanyId)
-                .ProjectTo<AgentDto>(_mapper.ConfigurationProvider)
                 .OrderBy(a => a.Id)
+                .ProjectTo<AgentDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
 
             return agents;

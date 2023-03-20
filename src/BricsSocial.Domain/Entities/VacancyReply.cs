@@ -15,7 +15,7 @@ namespace BricsSocial.Domain.Entities
         public int VacancyId { get; set; }
         public Vacancy Vacancy { get; set; }
 
-        public List<VacancyReplyFeedback> Feedbacks { get; set; }
+        public List<VacancyReplyFeedback> Feedbacks { get; set; } = new List<VacancyReplyFeedback>();
 
         public static class Invariants
         {

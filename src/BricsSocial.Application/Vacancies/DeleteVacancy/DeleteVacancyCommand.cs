@@ -1,4 +1,5 @@
-﻿using BricsSocial.Application.Common.Exceptions;
+﻿using BricsSocial.Application.Agents.Services;
+using BricsSocial.Application.Common.Exceptions;
 using BricsSocial.Application.Common.Exceptions.Application;
 using BricsSocial.Application.Common.Exceptions.Common;
 using BricsSocial.Application.Common.Interfaces;
@@ -18,11 +19,13 @@ namespace BricsSocial.Application.Vacancies.DeleteVacancy
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUser;
+        private readonly IAgentService _agentService;
 
-        public DeleteVacancyCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+        public DeleteVacancyCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IAgentService agentService)
         {
             _context = context;
             _currentUser = currentUser;
+            _agentService = agentService;
         }
 
         public async Task Handle(DeleteVacancyCommand request, CancellationToken cancellationToken)
@@ -35,20 +38,8 @@ namespace BricsSocial.Application.Vacancies.DeleteVacancy
                 throw new NotFoundException(nameof(vacancy), request.Id);
 
             if(_currentUser.Role == UserRoles.Agent)
-            {
-                var userId = _currentUser.UserId;
-
-                var agent = await _context.Agents
-                    .Where(a => a.IdentityId == userId)
-                    .FirstOrDefaultAsync();
-
-                if (agent is null)
-                    throw new AgentUserNotFound(userId);
-
-                if (agent.CompanyId != vacancy.CompanyId)
-                    throw new AgentBelongsToOtherCompanyException(agent.Id, agent.CompanyId, vacancy.CompanyId);
-            }
-
+                await _agentService.CheckAgentBelongsToCompany(_currentUser.UserId, vacancy.CompanyId);
+            
             _context.Vacancies.Remove(vacancy);
 
             await _context.SaveChangesAsync(cancellationToken);

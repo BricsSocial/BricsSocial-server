@@ -36,8 +36,8 @@ namespace BricsSocial.Application.Companies.GetCompanies
             var companies = await _context.Companies
                .AsNoTracking()
                .Where(v => request.CountryId == null || v.CountryId == request.CountryId)
-               .ProjectTo<CompanyDto>(_mapper.ConfigurationProvider)
                .OrderBy(v => v.Id)
+               .ProjectTo<CompanyDto>(_mapper.ConfigurationProvider)
                .PaginatedListAsync(request.PageNumber, request.PageSize);
 
             return companies;

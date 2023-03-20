@@ -17,7 +17,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<VacancyDto>> GetVacancy(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<VacancyDto>> Get(int id, CancellationToken cancellationToken)
         {
             return Ok(await Mediator.Send(new GetVacancyQuery { Id = id }, cancellationToken));
         }
@@ -26,7 +26,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PaginatedList<VacancyDto>>> GetVacancies([FromQuery] GetVacanciesQuery request, CancellationToken cancellationToken)
+        public async Task<ActionResult<PaginatedList<VacancyDto>>> Get([FromQuery] GetVacanciesQuery request, CancellationToken cancellationToken)
         {
             return Ok(await Mediator.Send(request, cancellationToken));
         }
@@ -46,7 +46,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<VacancyDto>> UpdateVacancy(int id, UpdateVacancyCommand request, CancellationToken cancellationToken)
+        public async Task<ActionResult<VacancyDto>> Update(int id, UpdateVacancyCommand request, CancellationToken cancellationToken)
         {
             if (id != request.Id)
                 return BadRequest();
@@ -61,7 +61,7 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [RequestType(typeof(DeleteVacancyCommand))]
-        public async Task<IActionResult> DeleteVacancy(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             await Mediator.Send(new DeleteVacancyCommand { Id = id }, cancellationToken);
 

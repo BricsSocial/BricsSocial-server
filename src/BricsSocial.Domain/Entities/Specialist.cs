@@ -18,8 +18,8 @@ namespace BricsSocial.Domain.Entities
         public int? ResumeId { get; set; }
         public Resume? Resume { get; set; }
 
-        public List<FriendRequest> FromFriendRequests { get; set; }
-        public List<FriendRequest> ToFriendRequests { get; set; }
+        public List<FriendRequest> FromFriendRequests { get; set; } = new List<FriendRequest>();
+        public List<FriendRequest> ToFriendRequests { get; set; } = new List<FriendRequest>();
 
         public static class Invariants
         {

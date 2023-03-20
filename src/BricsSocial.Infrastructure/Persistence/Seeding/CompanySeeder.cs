@@ -1,4 +1,5 @@
-﻿using BricsSocial.Domain.Entities;
+﻿using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
 {
     internal class CompanySeeder : ISeeder
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
 
-        public CompanySeeder(ApplicationDbContext context)
+        public CompanySeeder(IApplicationDbContext context)
         {
             _context = context;
         }
@@ -35,7 +36,7 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
 
             _context.Companies.AddRange(companies);
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(default);
         }
     }
 }

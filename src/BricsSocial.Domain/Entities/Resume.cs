@@ -14,7 +14,9 @@ namespace BricsSocial.Domain.Entities
         public int SpecialistId { get; set; }
         public Specialist Specialist { get; set; }
 
-        public List<ResumeReply> ResumeReplies { get; set; }
+
+        public List<SkillTag> SkillTags { get; set; } = new List<SkillTag>();
+        public List<ResumeReply> ResumeReplies { get; set; } = new List<ResumeReply>();
 
         public static class Invariants
         {
