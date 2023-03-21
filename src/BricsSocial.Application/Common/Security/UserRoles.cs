@@ -14,5 +14,6 @@ namespace BricsSocial.Application.Common.Security
 
         public const string AdministratorAndAgent = $"{Administrator},{Agent}";
         public const string AdministratorAndSpecialist = $"{Administrator},{Specialist}";
+        public const string AgentAndSpecialist = $"{Agent},{Specialist}";
     }
 }

@@ -14,7 +14,8 @@ namespace BricsSocial.Application.Agents.Services
 {
     public interface IAgentService
     {
-        Task CheckAgentBelongsToCompany(string userId, int companyId);
+        Task<Agent> GetAgentByUserId(string userId);
+        Task<Agent> CheckAgentBelongsToCompany(string userId, int companyId);
     }
 
     public sealed class AgentService : IAgentService
@@ -26,17 +27,27 @@ namespace BricsSocial.Application.Agents.Services
             _context = context;
         }
 
-        public async Task CheckAgentBelongsToCompany(string userId, int companyId)
+        public async Task<Agent> CheckAgentBelongsToCompany(string userId, int companyId)
+        {
+            var agent = await GetAgentByUserId(userId);
+
+            if (agent.CompanyId != companyId)
+                throw new AgentBelongsToOtherCompany(agent.Id, agent.CompanyId, companyId);
+
+            return agent;
+        }
+
+        public async Task<Agent> GetAgentByUserId(string userId)
         {
             var agent = await _context.Agents
+                .AsNoTracking()
                 .Where(a => a.IdentityId == userId)
-            .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             if (agent is null)
                 throw new AgentUserNotFound(userId);
 
-            if (agent.CompanyId != companyId)
-                throw new AgentBelongsToOtherCompany(agent.Id, agent.CompanyId, companyId);
+            return agent;
         }
     }
 }

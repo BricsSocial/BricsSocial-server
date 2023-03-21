@@ -717,22 +717,10 @@
         }
       }
     },
-    "/api/resumes/{id}": {
+    "/api/replies": {
       "get": {
         "tags": [
-          "Resumes"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
+          "Replies"
         ],
         "responses": {
           "200": {
@@ -740,303 +728,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResumeDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReplyDto"
+                  }
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Resumes"
-        ],
-        "summary": " (Auth roles: Specialist)",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateResumeCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateResumeCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateResumeCommand"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResumeDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Resumes"
-        ],
-        "summary": " (Auth roles: Specialist)",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      }
-    },
-    "/api/resumes": {
-      "get": {
-        "tags": [
-          "Resumes"
-        ],
-        "parameters": [
-          {
-            "name": "SpecialistId",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "CountryId",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "SkillTagsIds",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          },
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedList<ResumeDto>"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Resumes"
-        ],
-        "summary": " (Auth roles: Specialist)",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateResumeCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateResumeCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateResumeCommand"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResumeDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
           }
         }
       }
@@ -1079,6 +777,18 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "SkillTagsIds",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
             }
           },
           {
@@ -1855,28 +1565,6 @@
         },
         "additionalProperties": false
       },
-      "CreateResumeCommand": {
-        "type": "object",
-        "properties": {
-          "skills": {
-            "type": "string",
-            "nullable": true
-          },
-          "experience": {
-            "type": "string",
-            "nullable": true
-          },
-          "skillTagsIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "CreateSpecialistCommand": {
         "required": [
           "countryId",
@@ -2069,41 +1757,6 @@
         },
         "additionalProperties": false
       },
-      "PaginatedList<ResumeDto>": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResumeDto"
-            },
-            "nullable": true
-          },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "hasPreviousPage": {
-            "type": "boolean",
-            "readOnly": true
-          },
-          "hasNextPage": {
-            "type": "boolean",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
       "PaginatedList<SpecialistDto>": {
         "type": "object",
         "properties": {
@@ -2201,37 +1854,68 @@
         },
         "additionalProperties": { }
       },
-      "ResumeDto": {
+      "ReplyDto": {
         "type": "object",
         "properties": {
-          "id": {
+          "specialistMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "agentMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "agentId": {
             "type": "integer",
-            "format": "int32"
-          },
-          "skills": {
-            "type": "string",
+            "format": "int32",
             "nullable": true
           },
-          "experience": {
-            "type": "string",
-            "nullable": true
+          "agent": {
+            "$ref": "#/components/schemas/AgentDto"
           },
           "specialistId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "specialist": {
             "$ref": "#/components/schemas/SpecialistDto"
           },
-          "skillTags": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SkillTagDto"
-            },
+          "vacancyId": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
+          },
+          "vacancy": {
+            "$ref": "#/components/schemas/VacancyDto"
+          },
+          "replyStatus": {
+            "$ref": "#/components/schemas/ReplyStatus"
+          },
+          "replyType": {
+            "$ref": "#/components/schemas/ReplyType"
           }
         },
         "additionalProperties": false
+      },
+      "ReplyStatus": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "0 = Waiting, 1 = Approve, 2 = Reject",
+        "format": "int32"
+      },
+      "ReplyType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "description": "0 = Specialist, 1 = Vacancy",
+        "format": "int32"
       },
       "SkillTagDto": {
         "type": "object",
@@ -2266,11 +1950,15 @@
             "type": "string",
             "nullable": true
           },
-          "shortBio": {
+          "bio": {
             "type": "string",
             "nullable": true
           },
-          "longBio": {
+          "skills": {
+            "type": "string",
+            "nullable": true
+          },
+          "experience": {
             "type": "string",
             "nullable": true
           },
@@ -2281,6 +1969,13 @@
           "countryId": {
             "type": "integer",
             "format": "int32"
+          },
+          "skillTags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SkillTagDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2349,35 +2044,6 @@
         },
         "additionalProperties": false
       },
-      "UpdateResumeCommand": {
-        "required": [
-          "id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "skills": {
-            "type": "string",
-            "nullable": true
-          },
-          "experience": {
-            "type": "string",
-            "nullable": true
-          },
-          "skillTagsIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "UpdateSpecialistCommand": {
         "required": [
           "id"
@@ -2396,16 +2062,28 @@
             "type": "string",
             "nullable": true
           },
-          "shortBio": {
+          "bio": {
             "type": "string",
             "nullable": true
           },
-          "longBio": {
+          "skills": {
+            "type": "string",
+            "nullable": true
+          },
+          "experience": {
             "type": "string",
             "nullable": true
           },
           "photo": {
             "type": "string",
+            "nullable": true
+          },
+          "skillTagsIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
             "nullable": true
           }
         },

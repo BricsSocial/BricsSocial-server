@@ -210,8 +210,9 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ShortBio = table.Column<string>(type: "TEXT", maxLength: 70, nullable: true),
-                    LongBio = table.Column<string>(type: "TEXT", maxLength: 3000, nullable: true),
+                    Bio = table.Column<string>(type: "TEXT", maxLength: 70, nullable: false, defaultValue: ""),
+                    Skills = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false, defaultValue: ""),
+                    Experience = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false, defaultValue: ""),
                     Photo = table.Column<string>(type: "TEXT", maxLength: 2097152, nullable: true),
                     CountryId = table.Column<int>(type: "INTEGER", nullable: false),
                     IdentityId = table.Column<string>(type: "TEXT", nullable: false),
@@ -291,51 +292,61 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FriendRequests",
+                name: "SkillTagSpecialist",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Message = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: false),
-                    FromSpecialistId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ToSpecialistId = table.Column<int>(type: "INTEGER", nullable: false)
+                    SkillTagsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SpecialistsId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FriendRequests", x => x.Id);
+                    table.PrimaryKey("PK_SkillTagSpecialist", x => new { x.SkillTagsId, x.SpecialistsId });
                     table.ForeignKey(
-                        name: "FK_FriendRequests_Specialists_FromSpecialistId",
-                        column: x => x.FromSpecialistId,
-                        principalTable: "Specialists",
+                        name: "FK_SkillTagSpecialist_SkillTags_SkillTagsId",
+                        column: x => x.SkillTagsId,
+                        principalTable: "SkillTags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FriendRequests_Specialists_ToSpecialistId",
-                        column: x => x.ToSpecialistId,
+                        name: "FK_SkillTagSpecialist_Specialists_SpecialistsId",
+                        column: x => x.SpecialistsId,
                         principalTable: "Specialists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Resumes",
+                name: "Replies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Skills = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false),
-                    Experience = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false),
-                    SpecialistId = table.Column<int>(type: "INTEGER", nullable: false)
+                    SpecialistMessage = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: true),
+                    AgentMessage = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: true),
+                    AgentId = table.Column<int>(type: "INTEGER", nullable: true),
+                    SpecialistId = table.Column<int>(type: "INTEGER", nullable: true),
+                    VacancyId = table.Column<int>(type: "INTEGER", nullable: true),
+                    ReplyStatus = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),
+                    ReplyType = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Resumes", x => x.Id);
+                    table.PrimaryKey("PK_Replies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Resumes_Specialists_SpecialistId",
+                        name: "FK_Replies_Agents_AgentId",
+                        column: x => x.AgentId,
+                        principalTable: "Agents",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Replies_Specialists_SpecialistId",
                         column: x => x.SpecialistId,
                         principalTable: "Specialists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Replies_Vacancies_VacancyId",
+                        column: x => x.VacancyId,
+                        principalTable: "Vacancies",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -358,139 +369,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         name: "FK_SkillTagVacancy_Vacancies_VacanciesId",
                         column: x => x.VacanciesId,
                         principalTable: "Vacancies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VacancyReplies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Message = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: false),
-                    SpecialistId = table.Column<int>(type: "INTEGER", nullable: false),
-                    VacancyId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VacancyReplies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_VacancyReplies_Specialists_SpecialistId",
-                        column: x => x.SpecialistId,
-                        principalTable: "Specialists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_VacancyReplies_Vacancies_VacancyId",
-                        column: x => x.VacancyId,
-                        principalTable: "Vacancies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ResumeReplies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Message = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: false),
-                    ResumeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AgentId = table.Column<int>(type: "INTEGER", nullable: false),
-                    VacancyId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ResumeReplies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ResumeReplies_Agents_AgentId",
-                        column: x => x.AgentId,
-                        principalTable: "Agents",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ResumeReplies_Resumes_ResumeId",
-                        column: x => x.ResumeId,
-                        principalTable: "Resumes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ResumeReplies_Vacancies_VacancyId",
-                        column: x => x.VacancyId,
-                        principalTable: "Vacancies",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ResumeSkillTag",
-                columns: table => new
-                {
-                    ResumesId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SkillTagsId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ResumeSkillTag", x => new { x.ResumesId, x.SkillTagsId });
-                    table.ForeignKey(
-                        name: "FK_ResumeSkillTag_Resumes_ResumesId",
-                        column: x => x.ResumesId,
-                        principalTable: "Resumes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ResumeSkillTag_SkillTags_SkillTagsId",
-                        column: x => x.SkillTagsId,
-                        principalTable: "SkillTags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VacancyReplyFeedbacks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Message = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    AgentId = table.Column<int>(type: "INTEGER", nullable: false),
-                    VacancyReplyId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VacancyReplyFeedbacks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_VacancyReplyFeedbacks_Agents_AgentId",
-                        column: x => x.AgentId,
-                        principalTable: "Agents",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_VacancyReplyFeedbacks_VacancyReplies_VacancyReplyId",
-                        column: x => x.VacancyReplyId,
-                        principalTable: "VacancyReplies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ResumeReplyFeedbacks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Message = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    ResumeReplyId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ResumeReplyFeedbacks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ResumeReplyFeedbacks_ResumeReplies_ResumeReplyId",
-                        column: x => x.ResumeReplyId,
-                        principalTable: "ResumeReplies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -549,51 +427,30 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FriendRequests_FromSpecialistId",
-                table: "FriendRequests",
-                column: "FromSpecialistId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FriendRequests_ToSpecialistId",
-                table: "FriendRequests",
-                column: "ToSpecialistId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ResumeReplies_AgentId",
-                table: "ResumeReplies",
+                name: "IX_Replies_AgentId",
+                table: "Replies",
                 column: "AgentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ResumeReplies_ResumeId",
-                table: "ResumeReplies",
-                column: "ResumeId");
+                name: "IX_Replies_SpecialistId",
+                table: "Replies",
+                column: "SpecialistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ResumeReplies_VacancyId",
-                table: "ResumeReplies",
+                name: "IX_Replies_VacancyId",
+                table: "Replies",
                 column: "VacancyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ResumeReplyFeedbacks_ResumeReplyId",
-                table: "ResumeReplyFeedbacks",
-                column: "ResumeReplyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Resumes_SpecialistId",
-                table: "Resumes",
-                column: "SpecialistId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ResumeSkillTag_SkillTagsId",
-                table: "ResumeSkillTag",
-                column: "SkillTagsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SkillTags_Name",
                 table: "SkillTags",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SkillTagSpecialist_SpecialistsId",
+                table: "SkillTagSpecialist",
+                column: "SpecialistsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SkillTagVacancy_VacanciesId",
@@ -615,26 +472,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 name: "IX_Vacancies_CompanyId",
                 table: "Vacancies",
                 column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VacancyReplies_SpecialistId",
-                table: "VacancyReplies",
-                column: "SpecialistId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VacancyReplies_VacancyId",
-                table: "VacancyReplies",
-                column: "VacancyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VacancyReplyFeedbacks_AgentId",
-                table: "VacancyReplyFeedbacks",
-                column: "AgentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VacancyReplyFeedbacks_VacancyReplyId",
-                table: "VacancyReplyFeedbacks",
-                column: "VacancyReplyId");
         }
 
         /// <inheritdoc />
@@ -656,49 +493,34 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "FriendRequests");
+                name: "Replies");
 
             migrationBuilder.DropTable(
-                name: "ResumeReplyFeedbacks");
-
-            migrationBuilder.DropTable(
-                name: "ResumeSkillTag");
+                name: "SkillTagSpecialist");
 
             migrationBuilder.DropTable(
                 name: "SkillTagVacancy");
 
             migrationBuilder.DropTable(
-                name: "VacancyReplyFeedbacks");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "ResumeReplies");
-
-            migrationBuilder.DropTable(
-                name: "SkillTags");
-
-            migrationBuilder.DropTable(
-                name: "VacancyReplies");
 
             migrationBuilder.DropTable(
                 name: "Agents");
 
             migrationBuilder.DropTable(
-                name: "Resumes");
+                name: "Specialists");
+
+            migrationBuilder.DropTable(
+                name: "SkillTags");
 
             migrationBuilder.DropTable(
                 name: "Vacancies");
 
             migrationBuilder.DropTable(
-                name: "Specialists");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Companies");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Countries");

@@ -14,6 +14,8 @@ namespace BricsSocial.Domain.Entities
         public int CompanyId { get; set; }
         public Company Company { get; set; }
 
+        public List<Reply> Replies { get; set; } = new List<Reply>();
+
         public static class Invariants
         {
             public const int FirstNameMinLength = 2;

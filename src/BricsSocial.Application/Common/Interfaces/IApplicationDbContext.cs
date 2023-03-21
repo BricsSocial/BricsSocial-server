@@ -11,14 +11,7 @@ public interface IApplicationDbContext
     DbSet<Company> Companies { get; }
 
     DbSet<Vacancy> Vacancies { get; }
-    DbSet<VacancyReply> VacancyReplies { get; }
-    DbSet<VacancyReplyFeedback> VacancyReplyFeedbacks { get; }
-
-    DbSet<Resume> Resumes { get; }
-    DbSet<ResumeReply> ResumeReplies { get; }
-    DbSet<ResumeReplyFeedback> ResumeReplyFeedbacks { get; }
-
-    DbSet<FriendRequest> FriendRequests { get; }
+    DbSet<Reply> Replies { get; }
 
     DbSet<SkillTag> SkillTags { get; }
 

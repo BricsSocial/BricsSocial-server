@@ -16,6 +16,7 @@ namespace BricsSocial.Application.Specialists.GetSpecialists
     public sealed class GetSpecialistsQuery : PageQuery, IRequest<PaginatedList<SpecialistDto>>
     {
         public int? CountryId { get; init; }
+        public List<int>? SkillTagsIds { get; init; }
     }
 
     public sealed class GetSpecialistsQueryhandler : IRequestHandler<GetSpecialistsQuery, PaginatedList<SpecialistDto>>
@@ -31,8 +32,10 @@ namespace BricsSocial.Application.Specialists.GetSpecialists
 
         public async Task<PaginatedList<SpecialistDto>> Handle(GetSpecialistsQuery request, CancellationToken cancellationToken)
         {
+            var skillTagsSet = request.SkillTagsIds?.ToHashSet() ?? new HashSet<int>();
             var specialists = await _context.Specialists
                 .Where(s => request.CountryId == null || s.CountryId == request.CountryId)
+                .Where(s => request.SkillTagsIds == null || s.SkillTags.Any(s => skillTagsSet.Contains(s.Id)))
                 .OrderBy(s => s.Id)
                 .ProjectTo<SpecialistDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);

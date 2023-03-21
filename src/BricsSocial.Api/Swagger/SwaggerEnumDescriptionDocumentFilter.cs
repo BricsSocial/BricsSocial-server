@@ -102,7 +102,7 @@ namespace BricsSocial.Api.Swagger
                 foreach (var parameter in operation.Value.Parameters)
                 {
                     var parameterDescription = operationDescription.ParameterDescriptions.FirstOrDefault(a => a.Name == parameter.Name);
-                    if (parameterDescription != null && TryGetEnumType(parameterDescription.Type, out Type enumType))
+                    if (parameterDescription != null && parameterDescription.Type != null && TryGetEnumType(parameterDescription.Type, out Type enumType))
                     {
                         var paramEnum = swaggerDoc.Components.Schemas.FirstOrDefault(x => x.Key == enumType.Name);
                         if (paramEnum.Value != null)

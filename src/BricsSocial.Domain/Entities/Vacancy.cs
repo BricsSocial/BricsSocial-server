@@ -14,7 +14,7 @@ namespace BricsSocial.Domain.Entities
         public Company Company { get; set; }
 
         public List<SkillTag> SkillTags { get; set; } = new List<SkillTag>();
-        public List<VacancyReply> VacancyReplies { get; set; } = new List<VacancyReply>();
+        public List<Reply> Replies { get; set; } = new List<Reply>();
 
         public static class Invariants
         {

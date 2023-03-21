@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BricsSocial.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230320120004_Initial")]
+    [Migration("20230321143934_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -112,75 +112,33 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("BricsSocial.Domain.Entities.FriendRequest", b =>
+            modelBuilder.Entity("BricsSocial.Domain.Entities.Reply", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FromSpecialistId")
+                    b.Property<int?>("AgentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Message")
-                        .IsRequired()
+                    b.Property<string>("AgentMessage")
                         .HasMaxLength(1500)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ToSpecialistId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromSpecialistId");
-
-                    b.HasIndex("ToSpecialistId");
-
-                    b.ToTable("FriendRequests");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.Resume", b =>
-                {
-                    b.Property<int>("Id")
+                    b.Property<int>("ReplyStatus")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("ReplyType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Experience")
-                        .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Skills")
-                        .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SpecialistId")
+                    b.Property<int?>("SpecialistId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpecialistId")
-                        .IsUnique();
-
-                    b.ToTable("Resumes");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.ResumeReply", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AgentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
+                    b.Property<string>("SpecialistMessage")
                         .HasMaxLength(1500)
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("ResumeId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("VacancyId")
                         .HasColumnType("INTEGER");
@@ -189,35 +147,11 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("AgentId");
 
-                    b.HasIndex("ResumeId");
+                    b.HasIndex("SpecialistId");
 
                     b.HasIndex("VacancyId");
 
-                    b.ToTable("ResumeReplies");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.ResumeReplyFeedback", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasMaxLength(1500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ResumeReplyId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ResumeReplyId");
-
-                    b.ToTable("ResumeReplyFeedbacks");
+                    b.ToTable("Replies");
                 });
 
             modelBuilder.Entity("BricsSocial.Domain.Entities.SkillTag", b =>
@@ -245,12 +179,26 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(70)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
+
                     b.Property<int>("CountryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Experience")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(10000)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -266,17 +214,16 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("LongBio")
-                        .HasMaxLength(3000)
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Photo")
                         .HasMaxLength(2097152)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ShortBio")
-                        .HasMaxLength(70)
-                        .HasColumnType("TEXT");
+                    b.Property<string>("Skills")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(10000)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.HasKey("Id");
 
@@ -320,61 +267,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Vacancies");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.VacancyReply", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasMaxLength(1500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SpecialistId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("VacancyId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpecialistId");
-
-                    b.HasIndex("VacancyId");
-
-                    b.ToTable("VacancyReplies");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.VacancyReplyFeedback", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AgentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasMaxLength(1500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("VacancyReplyId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AgentId");
-
-                    b.HasIndex("VacancyReplyId");
-
-                    b.ToTable("VacancyReplyFeedbacks");
                 });
 
             modelBuilder.Entity("BricsSocial.Infrastructure.Identity.ApplicationUser", b =>
@@ -569,19 +461,19 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ResumeSkillTag", b =>
+            modelBuilder.Entity("SkillTagSpecialist", b =>
                 {
-                    b.Property<int>("ResumesId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("SkillTagsId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ResumesId", "SkillTagsId");
+                    b.Property<int>("SpecialistsId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("SkillTagsId");
+                    b.HasKey("SkillTagsId", "SpecialistsId");
 
-                    b.ToTable("ResumeSkillTag");
+                    b.HasIndex("SpecialistsId");
+
+                    b.ToTable("SkillTagSpecialist");
                 });
 
             modelBuilder.Entity("SkillTagVacancy", b =>
@@ -627,70 +519,25 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("BricsSocial.Domain.Entities.FriendRequest", b =>
-                {
-                    b.HasOne("BricsSocial.Domain.Entities.Specialist", "FromSpecialist")
-                        .WithMany("FromFriendRequests")
-                        .HasForeignKey("FromSpecialistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BricsSocial.Domain.Entities.Specialist", "ToSpecialist")
-                        .WithMany("ToFriendRequests")
-                        .HasForeignKey("ToSpecialistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FromSpecialist");
-
-                    b.Navigation("ToSpecialist");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.Resume", b =>
-                {
-                    b.HasOne("BricsSocial.Domain.Entities.Specialist", "Specialist")
-                        .WithOne("Resume")
-                        .HasForeignKey("BricsSocial.Domain.Entities.Resume", "SpecialistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Specialist");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.ResumeReply", b =>
+            modelBuilder.Entity("BricsSocial.Domain.Entities.Reply", b =>
                 {
                     b.HasOne("BricsSocial.Domain.Entities.Agent", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Replies")
+                        .HasForeignKey("AgentId");
 
-                    b.HasOne("BricsSocial.Domain.Entities.Resume", "Resume")
-                        .WithMany("ResumeReplies")
-                        .HasForeignKey("ResumeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("BricsSocial.Domain.Entities.Specialist", "Specialist")
+                        .WithMany("Replies")
+                        .HasForeignKey("SpecialistId");
 
                     b.HasOne("BricsSocial.Domain.Entities.Vacancy", "Vacancy")
-                        .WithMany()
+                        .WithMany("Replies")
                         .HasForeignKey("VacancyId");
 
                     b.Navigation("Agent");
 
-                    b.Navigation("Resume");
+                    b.Navigation("Specialist");
 
                     b.Navigation("Vacancy");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.ResumeReplyFeedback", b =>
-                {
-                    b.HasOne("BricsSocial.Domain.Entities.ResumeReply", "ResumeReply")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("ResumeReplyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ResumeReply");
                 });
 
             modelBuilder.Entity("BricsSocial.Domain.Entities.Specialist", b =>
@@ -719,44 +566,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.VacancyReply", b =>
-                {
-                    b.HasOne("BricsSocial.Domain.Entities.Specialist", "Specialist")
-                        .WithMany()
-                        .HasForeignKey("SpecialistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BricsSocial.Domain.Entities.Vacancy", "Vacancy")
-                        .WithMany("VacancyReplies")
-                        .HasForeignKey("VacancyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Specialist");
-
-                    b.Navigation("Vacancy");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.VacancyReplyFeedback", b =>
-                {
-                    b.HasOne("BricsSocial.Domain.Entities.Agent", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BricsSocial.Domain.Entities.VacancyReply", "VacancyReply")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("VacancyReplyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Agent");
-
-                    b.Navigation("VacancyReply");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -810,17 +619,17 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ResumeSkillTag", b =>
+            modelBuilder.Entity("SkillTagSpecialist", b =>
                 {
-                    b.HasOne("BricsSocial.Domain.Entities.Resume", null)
-                        .WithMany()
-                        .HasForeignKey("ResumesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BricsSocial.Domain.Entities.SkillTag", null)
                         .WithMany()
                         .HasForeignKey("SkillTagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BricsSocial.Domain.Entities.Specialist", null)
+                        .WithMany()
+                        .HasForeignKey("SpecialistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -840,6 +649,11 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BricsSocial.Domain.Entities.Agent", b =>
+                {
+                    b.Navigation("Replies");
+                });
+
             modelBuilder.Entity("BricsSocial.Domain.Entities.Company", b =>
                 {
                     b.Navigation("Agents");
@@ -854,33 +668,14 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.Navigation("Specialists");
                 });
 
-            modelBuilder.Entity("BricsSocial.Domain.Entities.Resume", b =>
-                {
-                    b.Navigation("ResumeReplies");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.ResumeReply", b =>
-                {
-                    b.Navigation("Feedbacks");
-                });
-
             modelBuilder.Entity("BricsSocial.Domain.Entities.Specialist", b =>
                 {
-                    b.Navigation("FromFriendRequests");
-
-                    b.Navigation("Resume");
-
-                    b.Navigation("ToFriendRequests");
+                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("BricsSocial.Domain.Entities.Vacancy", b =>
                 {
-                    b.Navigation("VacancyReplies");
-                });
-
-            modelBuilder.Entity("BricsSocial.Domain.Entities.VacancyReply", b =>
-                {
-                    b.Navigation("Feedbacks");
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
 ﻿using BricsSocial.Application.Common.Mappings;
+using BricsSocial.Application.SkillTags.Common;
 using BricsSocial.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,14 @@ namespace BricsSocial.Application.Specialists.Common
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string? ShortBio { get; set; }
-        public string? LongBio { get; set; }
+
+        public string? Bio { get; set; }
+        public string? Skills { get; set; }
+        public string? Experience { get; set; }
+
         public string? Photo { get; set; }
 
         public int CountryId { get; set; }
+        public List<SkillTagDto> SkillTags { get; set; } = new List<SkillTagDto>();
     }
 }

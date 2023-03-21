@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BricsSocial.Application.Common.Exceptions.Common;
 using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Application.Common.Models;
 using BricsSocial.Application.Common.Security;
 using BricsSocial.Application.Specialists.Common;
+using BricsSocial.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,12 +18,15 @@ namespace BricsSocial.Application.Specialists.UpdateSpecialist
     [Authorize(Roles = UserRoles.Specialist)]
     public record UpdateSpecialistCommand : IRequest<SpecialistDto>
     {
-        public int? Id { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? ShortBio { get; set; }
-        public string? LongBio { get; set; }
-        public string? Photo { get; set; }
+        public int? Id { get; init; }
+        public string? FirstName { get; init; }
+        public string? LastName { get; init; }
+
+        public string? Bio { get; init; }
+        public string? Skills { get; init; }
+        public string? Experience { get; init; }
+        public string? Photo { get; init; }
+        public List<int>? SkillTagsIds { get; init; }
     }
 
     public sealed class UpdateSpecialistCommandHandler : IRequestHandler<UpdateSpecialistCommand, SpecialistDto>
@@ -54,12 +59,26 @@ namespace BricsSocial.Application.Specialists.UpdateSpecialist
                 specialist.FirstName = request.FirstName;
             if (request.LastName != null)
                 specialist.LastName = request.LastName;
-            if (request.ShortBio != null)
-                specialist.ShortBio = request.ShortBio;
-            if (request.LongBio != null)
-                specialist.LongBio = request.LongBio;
+            if (request.Bio != null)
+                specialist.Bio = request.Bio;
+            if (request.Skills != null)
+                specialist.Skills = request.Skills;
+            if (request.Experience != null)
+                specialist.Experience = request.Experience;
             if (request.Photo != null)
                 specialist.Photo = request.Photo;
+
+            if (request.SkillTagsIds != null)
+            {
+                var skillTags = new List<SkillTag>();
+                if (request.SkillTagsIds.Any())
+                {
+                    var skillTagsIdSet = request.SkillTagsIds.ToHashSet();
+                    skillTags = await _context.SkillTags.Where(s => skillTagsIdSet.Contains(s.Id)).ToListAsync();
+                }
+                
+                specialist.SkillTags = skillTags;
+            }
 
             _context.Specialists.Update(specialist);
 

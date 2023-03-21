@@ -79,8 +79,6 @@ namespace BricsSocial.Api
                 //var xmlPath = AppContext.BaseDirectory + "\\" + xmlFile;
                 //s.IncludeXmlComments(xmlPath);
 
-                //s.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
-                //s.OperationFilter<AppendAuthorizeToSummaryOperationFilter<AuthorizeAttribute>>();
                 s.OperationFilter<AppendCustomAuthorizeToSummaryOperationFilter>();
 
                 s.DocumentFilter<SwaggerEnumDescriptionDocumentFilter>();

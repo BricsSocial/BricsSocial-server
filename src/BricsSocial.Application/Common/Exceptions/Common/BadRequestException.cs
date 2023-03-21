@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BricsSocial.Domain.Enums
+namespace BricsSocial.Application.Common.Exceptions.Common
 {
-    public enum FeedbackStatus
+    public class BadRequestException : Exception
     {
-        Reject = 0,
-        Approve = 1,
+
     }
 }

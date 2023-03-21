@@ -1,6 +1,3 @@
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using BricsSocial.Api;
 using BricsSocial.Application;
 using BricsSocial.Infrastructure;
@@ -23,19 +20,19 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
+
+    // Initialize and seed database
+    using (var scope = app.Services.CreateScope())
+    {
+        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
+        await initialiser.InitializeAsync();
+        await initialiser.SeedAsync();
+    }
 }
 else
 {
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-}
-
-// Initialise and seed database
-using (var scope = app.Services.CreateScope())
-{
-    var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
-    await initialiser.InitialiseAsync();
-    await initialiser.SeedAsync();
 }
 
 app.UseCors(builder => builder.AllowAnyOrigin());
@@ -49,7 +46,6 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseRouting();
-
 
 app.UseAuthentication();
 app.UseAuthorization();

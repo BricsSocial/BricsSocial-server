@@ -8,17 +8,17 @@ namespace BricsSocial.Domain.Entities
 {
     public sealed class Specialist : UserBase
     {
-        public string? ShortBio { get; set; }
-        public string? LongBio { get; set; }
+        public string Bio { get; set; }
+        public string Skills { get; set; }
+        public string Experience { get; set; }
+
         public string? Photo { get; set; }
 
         public int CountryId { get; set; }
         public Country Country { get; set; }
 
-        public Resume? Resume { get; set; }
-
-        public List<FriendRequest> FromFriendRequests { get; set; } = new List<FriendRequest>();
-        public List<FriendRequest> ToFriendRequests { get; set; } = new List<FriendRequest>();
+        public List<SkillTag> SkillTags { get; set; } = new List<SkillTag>();
+        public List<Reply> Replies { get; set; } = new List<Reply>();
 
         public static class Invariants
         {
@@ -26,10 +26,14 @@ namespace BricsSocial.Domain.Entities
             public const int FirstNameMaxLength = 100;
             public const int LastNameMinLength = 2;
             public const int LastNameMaxLength = 100;
-            public const int ShortBioMinLength = 1;
-            public const int ShortBioMaxLength = 70;
-            public const int LongBioMinLength = 1;
-            public const int LongBioMaxLength = 3000;
+
+            public const int BioMinLength = 0;
+            public const int BioMaxLength = 70;
+            public const int SkillsMinLength = 0;
+            public const int SkillsMaxLength = 10000;
+            public const int ExperienceMinLength = 0;
+            public const int ExperienceMaxLength = 10000;
+
             public const int PhotoMinLength = 1;
             public const int PhotoMaxLength = 2 << 20;
         }

@@ -40,22 +40,21 @@ namespace BricsSocial.Infrastructure.Persistence
                 new AgentSeeder(_context, _userManager),
 
                 new SpecialistSeeder(_context, _userManager),
-                new ResumeSeeder(_context)
             };
         }
 
-        public async Task InitialiseAsync()
+        public async Task InitializeAsync()
         {
             try
             {
-                if (_context.Database.IsSqlServer() || _context.Database.IsSqlite())
+                if (_context.Database.IsSqlite())
                 {
                     await _context.Database.MigrateAsync();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while initialising the database.");
+                _logger.LogError(ex, "An error occurred while initializing the database.");
                 throw;
             }
         }

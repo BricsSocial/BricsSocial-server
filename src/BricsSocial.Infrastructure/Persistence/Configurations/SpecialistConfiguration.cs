@@ -1,4 +1,5 @@
-﻿using BricsSocial.Domain.Entities;
+﻿using BricsSocial.Application.Common.Models;
+using BricsSocial.Domain.Entities;
 using BricsSocial.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -25,18 +26,25 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
             builder.Property(s => s.LastName)
                 .HasMaxLength(Specialist.Invariants.LastNameMaxLength)
                 .IsRequired();
-            
-            builder.Property(s => s.ShortBio)
-                .HasMaxLength(Specialist.Invariants.ShortBioMaxLength);
-            builder.Property(s => s.LongBio)
-                .HasMaxLength(Specialist.Invariants.LongBioMaxLength);
+
+            builder.Property(s => s.Bio)
+                .HasMaxLength(Specialist.Invariants.BioMaxLength)
+                .HasDefaultValue(string.Empty)
+                .IsRequired();
+            builder.Property(r => r.Skills)
+                .HasMaxLength(Specialist.Invariants.SkillsMaxLength)
+                .HasDefaultValue(string.Empty)
+                .IsRequired();
+            builder.Property(r => r.Experience)
+                .HasMaxLength(Specialist.Invariants.ExperienceMaxLength)
+                .HasDefaultValue(string.Empty)
+                .IsRequired();
+
             builder.Property(c => c.Photo)
                 .HasMaxLength(Specialist.Invariants.PhotoMaxLength)
                 .IsRequired(false);
-
-            builder.HasOne(s => s.Resume).WithOne(r => r.Specialist).HasForeignKey<Resume>(r => r.SpecialistId);
-            builder.HasMany(s => s.FromFriendRequests).WithOne(f => f.FromSpecialist);
-            builder.HasMany(s => s.ToFriendRequests).WithOne(f => f.ToSpecialist);
+            
+            builder.HasMany(r => r.SkillTags).WithMany(s => s.Specialists);
         }
     }
 }
