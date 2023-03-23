@@ -9,15 +9,13 @@ namespace BricsSocial.Domain.Entities
     public sealed class Specialist : UserBase
     {
         public string Bio { get; set; }
-        public string Skills { get; set; }
-        public string Experience { get; set; }
+        public string About { get; set; }
+        public string SkillTags { get; set; }
 
         public string? Photo { get; set; }
 
         public int CountryId { get; set; }
         public Country Country { get; set; }
-
-        public List<SkillTag> SkillTags { get; set; } = new List<SkillTag>();
         public List<Reply> Replies { get; set; } = new List<Reply>();
 
         public static class Invariants
@@ -29,10 +27,8 @@ namespace BricsSocial.Domain.Entities
 
             public const int BioMinLength = 0;
             public const int BioMaxLength = 70;
-            public const int SkillsMinLength = 0;
-            public const int SkillsMaxLength = 10000;
-            public const int ExperienceMinLength = 0;
-            public const int ExperienceMaxLength = 10000;
+            public const int AboutMinLength = 0;
+            public const int AboutMaxLength = 10000;
 
             public const int PhotoMinLength = 1;
             public const int PhotoMaxLength = 2 << 20;

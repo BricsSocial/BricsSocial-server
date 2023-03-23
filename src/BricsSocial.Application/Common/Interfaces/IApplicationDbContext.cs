@@ -13,7 +13,5 @@ public interface IApplicationDbContext
     DbSet<Vacancy> Vacancies { get; }
     DbSet<Reply> Replies { get; }
 
-    DbSet<SkillTag> SkillTags { get; }
-
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

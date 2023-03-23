@@ -20,7 +20,7 @@ namespace BricsSocial.Application.Vacancies.UpdateVacancy
         public string? Requirements { get; init; }
         public string? Offerings { get; init; }
         public VacancyStatus? Status { get; init; }
-        public List<int>? SkillTagsIds { get; init; }
+        public string? SkillTags { get; init; }
     }
 
     public sealed class UpdateVacancyCommandHandler : IRequestHandler<UpdateVacancyCommand, VacancyDto>
@@ -58,13 +58,8 @@ namespace BricsSocial.Application.Vacancies.UpdateVacancy
                 vacancy.Offerings = request.Offerings;
             if(request.Status != null)
                 vacancy.Status = request.Status.Value;
-
-            if (request.SkillTagsIds != null)
-            {
-                var skillTags = _context.SkillTags.Where(s => request.SkillTagsIds.Contains(s.Id));
-
-                vacancy.SkillTags = await skillTags.ToListAsync();
-            }
+            if (request.SkillTags != null)
+                vacancy.SkillTags = request.SkillTags;
 
             _context.Vacancies.Update(vacancy);
 

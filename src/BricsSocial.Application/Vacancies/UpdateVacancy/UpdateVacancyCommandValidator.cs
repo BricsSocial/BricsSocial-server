@@ -1,4 +1,5 @@
-﻿using BricsSocial.Domain.Entities;
+﻿using BricsSocial.Application.SkillTags.Utils;
+using BricsSocial.Domain.Entities;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Application.Vacancies.UpdateVacancy
 {
-    public sealed class UpdateVacancyStatusCommandValidator : AbstractValidator<UpdateVacancyCommand>
+    public sealed class UpdateVacancyCommandValidator : AbstractValidator<UpdateVacancyCommand>
     {
-        public UpdateVacancyStatusCommandValidator()
+        public UpdateVacancyCommandValidator()
         {
             RuleFor(v => v.Id)
                 .NotNull();
@@ -26,6 +27,10 @@ namespace BricsSocial.Application.Vacancies.UpdateVacancy
             RuleFor(v => v.Status)
                 .IsInEnum()
                 .When(v => v.Status != null);
+            RuleFor(v => v.SkillTags)
+               .Must(SkillTagsUtils.BeListOfTags)
+               .WithMessage(v => SkillTagsUtils.InvalidTagsMessage())
+               .When(v => v.SkillTags != null);
         }
     }
 }

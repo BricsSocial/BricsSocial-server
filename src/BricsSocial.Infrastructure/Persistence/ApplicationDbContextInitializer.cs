@@ -34,7 +34,6 @@ namespace BricsSocial.Infrastructure.Persistence
                 new RoleSeeder(_roleManager),
                 new AdminSeeder(_userManager),
                 new CountrySeeder(_context),
-                new SkillTagSeeder(_context),
                 
                 new CompanySeeder(_context),
                 new AgentSeeder(_context, _userManager),

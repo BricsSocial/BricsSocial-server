@@ -1,4 +1,5 @@
 ﻿using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Application.SkillTags.Utils;
 using BricsSocial.Domain.Entities;
 using FluentValidation;
 using System;
@@ -23,6 +24,10 @@ namespace BricsSocial.Application.Vacancies.CreateVacancy
             RuleFor(e => e.Offerings)
                 .NotEmpty()
                 .MaximumLength(Vacancy.Invariants.OfferingsMaxLength);
+            RuleFor(v => v.SkillTags)
+               .Must(SkillTagsUtils.BeListOfTags)
+               .WithMessage(v => SkillTagsUtils.InvalidTagsMessage())
+               .When(v => v.SkillTags != null);
         }
     }
 }

@@ -6,15 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BricsSocial.Application.Vacancies.GetVacancies
+namespace BricsSocial.Application.Specialists.GetSpecialists
 {
-    public sealed class GetVacanciesQueryValidator : AbstractValidator<GetVacanciesQuery>
+    public sealed class GetSpecialistsQueryValidator : AbstractValidator<GetSpecialistsQuery>
     {
-        public GetVacanciesQueryValidator()
+        public GetSpecialistsQueryValidator()
         {
-            RuleFor(v => v.Status)
-                .IsInEnum()
-                .When(v => v.Status != null);
             RuleFor(v => v.SkillTags)
                 .Must(SkillTagsUtils.BeListOfTags)
                 .WithMessage(v => SkillTagsUtils.InvalidTagsMessage())

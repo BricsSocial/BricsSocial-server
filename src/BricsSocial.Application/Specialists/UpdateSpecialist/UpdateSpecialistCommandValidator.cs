@@ -1,4 +1,5 @@
-﻿using BricsSocial.Domain.Entities;
+﻿using BricsSocial.Application.SkillTags.Utils;
+using BricsSocial.Domain.Entities;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,14 @@ namespace BricsSocial.Application.Specialists.UpdateSpecialist
             RuleFor(v => v.Bio)
                 .Length(Specialist.Invariants.BioMinLength, Specialist.Invariants.BioMaxLength)
                 .When(v => v.Bio != null);
-            RuleFor(v => v.Skills)
-                .Length(Specialist.Invariants.SkillsMinLength, Specialist.Invariants.SkillsMaxLength)
-                .When(v => v.Skills != null);
-            RuleFor(v => v.Experience)
-                .Length(Specialist.Invariants.ExperienceMinLength, Specialist.Invariants.ExperienceMaxLength)
-                .When(v => v.Experience != null);
+            RuleFor(v => v.About)
+                .Length(Specialist.Invariants.AboutMinLength, Specialist.Invariants.AboutMaxLength)
+                .When(v => v.About != null);
+
+            RuleFor(v => v.SkillTags)
+               .Must(SkillTagsUtils.BeListOfTags)
+               .WithMessage(v => SkillTagsUtils.InvalidTagsMessage())
+               .When(v => v.SkillTags != null);
 
             RuleFor(v => v.Photo)
                 .Length(Specialist.Invariants.PhotoMinLength, Specialist.Invariants.PhotoMaxLength)

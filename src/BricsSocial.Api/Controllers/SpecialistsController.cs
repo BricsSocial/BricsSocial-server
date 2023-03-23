@@ -1,11 +1,17 @@
 ﻿using BricsSocial.Api.Swagger;
 using BricsSocial.Application.Common.Models;
+using BricsSocial.Application.Replies.Common;
+using BricsSocial.Application.Replies.CreateSpecialistReply;
+using BricsSocial.Application.Replies.GetReplies;
+using BricsSocial.Application.Replies.GetSpecialistReplies;
+using BricsSocial.Application.Replies.UpdateSpecialistReply;
 using BricsSocial.Application.Specialists.Common;
 using BricsSocial.Application.Specialists.CreateSpecialist;
 using BricsSocial.Application.Specialists.DeleteSpecialist;
 using BricsSocial.Application.Specialists.GetSpecialist;
 using BricsSocial.Application.Specialists.GetSpecialists;
 using BricsSocial.Application.Specialists.UpdateSpecialist;
+using BricsSocial.Application.Vacancies.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BricsSocial.Api.Controllers
@@ -68,6 +74,40 @@ namespace BricsSocial.Api.Controllers
             await Mediator.Send(new DeleteSpecialistCommand { Id = id }, cancellationToken);
 
             return NoContent();
+        }
+
+        [HttpPost("replies")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequestType(typeof(CreateSpecialistReplyCommand))]
+        public async Task<ActionResult<ReplyDto>> CreateReply(CreateSpecialistReplyCommand request, CancellationToken cancellationToken)
+        {
+            return StatusCode(StatusCodes.Status201Created, await Mediator.Send(request, cancellationToken));
+        }
+
+        [HttpPut("replies/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ReplyDto>> UpdateReply(int id, UpdateSpecialistReplyCommand request, CancellationToken cancellationToken)
+        {
+            if (request.Id != id)
+                return BadRequest();
+
+            return Ok(await Mediator.Send(request, cancellationToken));
+        }
+
+        [HttpGet("replies")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<PaginatedList<ReplyDto>>> GetReplies([FromQuery] GetSpecialistRepliesQuery request, CancellationToken cancellationToken)
+        {
+            return Ok(await Mediator.Send(request, cancellationToken));
         }
     }
 }

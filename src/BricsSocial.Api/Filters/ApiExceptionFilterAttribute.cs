@@ -19,6 +19,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
+                { typeof(BadRequestException), HandleBadRequestException },
 
                 // Application
                 { typeof(AgentBelongsToOtherCompany), HandleForbiddenAccessException },
@@ -74,6 +75,21 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         var details = new ValidationProblemDetails(exception.Errors)
         {
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+        };
+
+        context.Result = new BadRequestObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleBadRequestException(ExceptionContext context)
+    {
+        var exception = (BadRequestException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Detail = exception.Message
         };
 
         context.Result = new BadRequestObjectResult(details);

@@ -14,14 +14,10 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Reply> builder)
         {
-            builder.Property(r => r.AgentMessage)
-                .HasMaxLength(Reply.Invariants.MessageMaxLength)
-                .IsRequired(false);
-            builder.Property(r => r.SpecialistMessage)
-                .HasMaxLength(Reply.Invariants.MessageMaxLength)
-                .IsRequired(false);
-            builder.Property(r => r.ReplyStatus)
-                .HasDefaultValue(ReplyStatus.Waiting);
+            builder.Property(r => r.Status)
+                .HasDefaultValue(ReplyStatus.Pending);
+            builder.HasOne(r => r.Specialist).WithMany(s => s.Replies).HasForeignKey(r => r.SpecialistId);
+            builder.HasOne(r => r.Vacancy).WithMany(v => v.Replies).HasForeignKey(r => r.VacancyId);
         }
     }
 }

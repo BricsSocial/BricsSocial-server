@@ -16,8 +16,7 @@ namespace BricsSocial.Application.Vacancies.CreateVacancy
         public string? Name { get; init; }
         public string? Requirements { get; init; }
         public string? Offerings { get; init; }
-
-        public List<int>? SkillTagsIds { get; init; }
+        public string? SkillTags { get; init; }
     }
 
     public sealed class CreateVacancyCommandHandler : IRequestHandler<CreateVacancyCommand, VacancyDto>
@@ -48,13 +47,7 @@ namespace BricsSocial.Application.Vacancies.CreateVacancy
             vacancy.Requirements = request.Requirements;
             vacancy.Offerings = request.Offerings;
             vacancy.CompanyId = agent.CompanyId;
-
-            if (request.SkillTagsIds != null)
-            {
-                var skillTags = _context.SkillTags.Where(s => request.SkillTagsIds.Contains(s.Id));
-
-                vacancy.SkillTags.AddRange(skillTags);
-            }
+            vacancy.SkillTags = request.SkillTags;
 
             _context.Vacancies.Add(vacancy);
 

@@ -9,11 +9,11 @@ namespace BricsSocial.Domain.Entities
         public string Requirements { get; set; }
         public string Offerings { get; set; }
         public VacancyStatus Status { get; set; }
+        public string SkillTags { get; set; }
 
         public int CompanyId { get; set; }
         public Company Company { get; set; }
 
-        public List<SkillTag> SkillTags { get; set; } = new List<SkillTag>();
         public List<Reply> Replies { get; set; } = new List<Reply>();
 
         public static class Invariants

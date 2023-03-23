@@ -64,19 +64,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SkillTags",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SkillTags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -211,8 +198,8 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Bio = table.Column<string>(type: "TEXT", maxLength: 70, nullable: false, defaultValue: ""),
-                    Skills = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false, defaultValue: ""),
-                    Experience = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false, defaultValue: ""),
+                    About = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false, defaultValue: ""),
+                    SkillTags = table.Column<string>(type: "TEXT", maxLength: 409, nullable: false, defaultValue: ""),
                     Photo = table.Column<string>(type: "TEXT", maxLength: 2097152, nullable: true),
                     CountryId = table.Column<int>(type: "INTEGER", nullable: false),
                     IdentityId = table.Column<string>(type: "TEXT", nullable: false),
@@ -278,6 +265,7 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     Requirements = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false),
                     Offerings = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    SkillTags = table.Column<string>(type: "TEXT", maxLength: 409, nullable: false, defaultValue: ""),
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -292,42 +280,16 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SkillTagSpecialist",
-                columns: table => new
-                {
-                    SkillTagsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SpecialistsId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SkillTagSpecialist", x => new { x.SkillTagsId, x.SpecialistsId });
-                    table.ForeignKey(
-                        name: "FK_SkillTagSpecialist_SkillTags_SkillTagsId",
-                        column: x => x.SkillTagsId,
-                        principalTable: "SkillTags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SkillTagSpecialist_Specialists_SpecialistsId",
-                        column: x => x.SpecialistsId,
-                        principalTable: "Specialists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Replies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SpecialistMessage = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: true),
-                    AgentMessage = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: true),
                     AgentId = table.Column<int>(type: "INTEGER", nullable: true),
-                    SpecialistId = table.Column<int>(type: "INTEGER", nullable: true),
-                    VacancyId = table.Column<int>(type: "INTEGER", nullable: true),
-                    ReplyStatus = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),
-                    ReplyType = table.Column<int>(type: "INTEGER", nullable: false)
+                    SpecialistId = table.Column<int>(type: "INTEGER", nullable: false),
+                    VacancyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -341,33 +303,11 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         name: "FK_Replies_Specialists_SpecialistId",
                         column: x => x.SpecialistId,
                         principalTable: "Specialists",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Replies_Vacancies_VacancyId",
-                        column: x => x.VacancyId,
-                        principalTable: "Vacancies",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SkillTagVacancy",
-                columns: table => new
-                {
-                    SkillTagsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    VacanciesId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SkillTagVacancy", x => new { x.SkillTagsId, x.VacanciesId });
-                    table.ForeignKey(
-                        name: "FK_SkillTagVacancy_SkillTags_SkillTagsId",
-                        column: x => x.SkillTagsId,
-                        principalTable: "SkillTags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SkillTagVacancy_Vacancies_VacanciesId",
-                        column: x => x.VacanciesId,
+                        name: "FK_Replies_Vacancies_VacancyId",
+                        column: x => x.VacancyId,
                         principalTable: "Vacancies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -442,22 +382,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 column: "VacancyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SkillTags_Name",
-                table: "SkillTags",
-                column: "Name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SkillTagSpecialist_SpecialistsId",
-                table: "SkillTagSpecialist",
-                column: "SpecialistsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SkillTagVacancy_VacanciesId",
-                table: "SkillTagVacancy",
-                column: "VacanciesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Specialists_CountryId",
                 table: "Specialists",
                 column: "CountryId");
@@ -496,12 +420,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                 name: "Replies");
 
             migrationBuilder.DropTable(
-                name: "SkillTagSpecialist");
-
-            migrationBuilder.DropTable(
-                name: "SkillTagVacancy");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -509,9 +427,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Specialists");
-
-            migrationBuilder.DropTable(
-                name: "SkillTags");
 
             migrationBuilder.DropTable(
                 name: "Vacancies");

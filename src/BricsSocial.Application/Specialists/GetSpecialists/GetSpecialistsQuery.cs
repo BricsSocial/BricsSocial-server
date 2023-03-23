@@ -3,8 +3,10 @@ using AutoMapper.QueryableExtensions;
 using BricsSocial.Application.Common.Interfaces;
 using BricsSocial.Application.Common.Mappings;
 using BricsSocial.Application.Common.Models;
+using BricsSocial.Application.SkillTags.Utils;
 using BricsSocial.Application.Specialists.Common;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,7 @@ namespace BricsSocial.Application.Specialists.GetSpecialists
     public sealed class GetSpecialistsQuery : PageQuery, IRequest<PaginatedList<SpecialistDto>>
     {
         public int? CountryId { get; init; }
-        public List<int>? SkillTagsIds { get; init; }
+        public string? SkillTags { get; init; }
     }
 
     public sealed class GetSpecialistsQueryhandler : IRequestHandler<GetSpecialistsQuery, PaginatedList<SpecialistDto>>
@@ -32,11 +34,11 @@ namespace BricsSocial.Application.Specialists.GetSpecialists
 
         public async Task<PaginatedList<SpecialistDto>> Handle(GetSpecialistsQuery request, CancellationToken cancellationToken)
         {
-            var skillTagsSet = request.SkillTagsIds?.ToHashSet() ?? new HashSet<int>();
+            var requestedSkillTags = request.SkillTags == null ? new List<string>() : SkillTagsUtils.ParseTags(request.SkillTags);
             var specialists = await _context.Specialists
                 .Where(s => request.CountryId == null || s.CountryId == request.CountryId)
-                .Where(s => request.SkillTagsIds == null || s.SkillTags.Any(s => skillTagsSet.Contains(s.Id)))
-                .OrderBy(s => s.Id)
+                .MatchTags(request.SkillTags)
+                .OrderByDescending(s => s.Id)
                 .ProjectTo<SpecialistDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
 

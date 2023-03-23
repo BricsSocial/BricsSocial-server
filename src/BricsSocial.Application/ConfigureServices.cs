@@ -2,6 +2,7 @@
 using BricsSocial.Application.Agents.Services;
 using BricsSocial.Application.Common.Behaviours;
 using BricsSocial.Application.Common.Security;
+using BricsSocial.Application.Specialists.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,7 @@ public static class ConfigureServices
         });
 
         services.AddScoped<IAgentService, AgentService>();
+        services.AddScoped<ISpecialistService, SpecialistService>();
         services.AddScoped<IUserService, UserService>();
 
         return services;

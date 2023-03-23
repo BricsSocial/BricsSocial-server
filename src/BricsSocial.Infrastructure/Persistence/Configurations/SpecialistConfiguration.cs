@@ -31,12 +31,12 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
                 .HasMaxLength(Specialist.Invariants.BioMaxLength)
                 .HasDefaultValue(string.Empty)
                 .IsRequired();
-            builder.Property(r => r.Skills)
-                .HasMaxLength(Specialist.Invariants.SkillsMaxLength)
+            builder.Property(r => r.About)
+                .HasMaxLength(Specialist.Invariants.AboutMaxLength)
                 .HasDefaultValue(string.Empty)
                 .IsRequired();
-            builder.Property(r => r.Experience)
-                .HasMaxLength(Specialist.Invariants.ExperienceMaxLength)
+            builder.Property(r => r.SkillTags)
+                .HasMaxLength(SkillTag.Invariants.SkillTagsMaxLength)
                 .HasDefaultValue(string.Empty)
                 .IsRequired();
 
@@ -44,7 +44,6 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
                 .HasMaxLength(Specialist.Invariants.PhotoMaxLength)
                 .IsRequired(false);
             
-            builder.HasMany(r => r.SkillTags).WithMany(s => s.Specialists);
         }
     }
 }

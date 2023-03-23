@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace BricsSocial.Domain.Entities
 {
-    public sealed class SkillTag : EntityBase
+    public sealed class SkillTag
     {
-        public string Name { get; set; }
-
         public static class Invariants
         {
-            public const int NameMinLength = 2;
-            public const int NameMaxLength = 40;
+            public const int SkillTagMinLength = 2;
+            public const int SkillTagMaxLength = 40;
+            public const int SkillTagsMinLength = 0;
+            public const int SkillTagsMaxLength = 409;
+            public const int SkillTagsMaxCount = 10;
         }
-
-        public List<Specialist> Specialists { get; set; } = new List<Specialist>();
-        public List<Vacancy> Vacancies { get; set; } = new List<Vacancy>();
     }
 }

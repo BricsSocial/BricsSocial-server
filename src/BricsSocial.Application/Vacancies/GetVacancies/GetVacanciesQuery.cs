@@ -4,6 +4,7 @@ using BricsSocial.Application.Agents.Common;
 using BricsSocial.Application.Common.Interfaces;
 using BricsSocial.Application.Common.Mappings;
 using BricsSocial.Application.Common.Models;
+using BricsSocial.Application.SkillTags.Utils;
 using BricsSocial.Application.Vacancies.Common;
 using BricsSocial.Domain.Enums;
 using MediatR;
@@ -22,7 +23,7 @@ namespace BricsSocial.Application.Vacancies.GetVacancies
         public int? CompanyId { get; init; }
         public VacancyStatus? Status { get; init; }
 
-        public List<int>? SkillTagsIds { get; init; }
+        public string? SkillTags { get; init; }
     }
 
     public sealed class GetVacanciesQueryHandler : IRequestHandler<GetVacanciesQuery, PaginatedList<VacancyDto>>
@@ -38,14 +39,14 @@ namespace BricsSocial.Application.Vacancies.GetVacancies
 
         public async Task<PaginatedList<VacancyDto>> Handle(GetVacanciesQuery request, CancellationToken cancellationToken)
         {
-            var skillTagsSet = request.SkillTagsIds?.ToHashSet() ?? new HashSet<int>();
+            var requestedSkillTags = request.SkillTags == null ? new List<string>() : SkillTagsUtils.ParseTags(request.SkillTags);
             var vacancies = await _context.Vacancies
                 .AsNoTracking()
                 .Where(v => request.CompanyId == null || v.CompanyId == request.CompanyId)
                 .Where(v => request.CountryId == null || v.Company.CountryId == request.CountryId)
                 .Where(v => request.Status == null || v.Status == request.Status)
-                .Where(v => request.SkillTagsIds == null || v.SkillTags.Any(s => skillTagsSet.Contains(s.Id)))
-                .OrderBy(v => v.Id)
+                .MatchTags(request.SkillTags)
+                .OrderByDescending(v => v.Id)
                 .ProjectTo<VacancyDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
 

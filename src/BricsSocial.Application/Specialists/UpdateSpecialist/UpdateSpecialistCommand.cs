@@ -23,10 +23,9 @@ namespace BricsSocial.Application.Specialists.UpdateSpecialist
         public string? LastName { get; init; }
 
         public string? Bio { get; init; }
-        public string? Skills { get; init; }
-        public string? Experience { get; init; }
+        public string? About { get; init; }
+        public string? SkillTags { get; init; }
         public string? Photo { get; init; }
-        public List<int>? SkillTagsIds { get; init; }
     }
 
     public sealed class UpdateSpecialistCommandHandler : IRequestHandler<UpdateSpecialistCommand, SpecialistDto>
@@ -61,24 +60,12 @@ namespace BricsSocial.Application.Specialists.UpdateSpecialist
                 specialist.LastName = request.LastName;
             if (request.Bio != null)
                 specialist.Bio = request.Bio;
-            if (request.Skills != null)
-                specialist.Skills = request.Skills;
-            if (request.Experience != null)
-                specialist.Experience = request.Experience;
+            if (request.About != null)
+                specialist.About = request.About;
+            if (request.SkillTags != null)
+                specialist.SkillTags = request.SkillTags;
             if (request.Photo != null)
                 specialist.Photo = request.Photo;
-
-            if (request.SkillTagsIds != null)
-            {
-                var skillTags = new List<SkillTag>();
-                if (request.SkillTagsIds.Any())
-                {
-                    var skillTagsIdSet = request.SkillTagsIds.ToHashSet();
-                    skillTags = await _context.SkillTags.Where(s => skillTagsIdSet.Contains(s.Id)).ToListAsync();
-                }
-                
-                specialist.SkillTags = skillTags;
-            }
 
             _context.Specialists.Update(specialist);
 

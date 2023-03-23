@@ -39,21 +39,17 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
                     FirstName = "Nikolay",
                     LastName = "Krylov",
                     Bio = "Backend developer, 35 y.o.",
-                    Skills =  $"I'm very skilled at Spring, Web development, Microservices.{Environment.NewLine}Also I like developing IoT projects as a hobby",
-                    Experience = $"Senior Java dev at Dodo (4 years){Environment.NewLine}Middle Java dev at startups (3 years){Environment.NewLine}Overall more than 10 years",
-                    SkillTags = new List<SkillTag> { new SkillTag { Name = "Java" }, new SkillTag { Name = "Backend" }, new SkillTag { Name = "IoT" } }
+                    About = $"I'm very skilled at Spring, Web development, Microservices.{Environment.NewLine}Also I like developing IoT projects as a hobby.{Environment.NewLine}Senior Java dev at Dodo (4 years){Environment.NewLine}Middle Java dev at startups (3 years){Environment.NewLine}Overall more than 10 years",
+                    SkillTags = "Java,Backend,IoT"
                 },
-
                 new Specialist
                 {
                     FirstName = "Sergei",
                     LastName = "Filatov",
                     Bio = "Project manager, Moscow",
-                    Skills =  $"Working as a project manager in large Russian companies. Prefer R&D projects management. Experinced in most of modern frameworks and methodologies like SCRUM, Agile, etc.",
-                    Experience = $"Project manager at Skolkovo (3 years){Environment.NewLine}SCRUM master at SBER (1 year)",
-                    SkillTags = new List<SkillTag> { new SkillTag { Name = "Project management" }, new SkillTag { Name = "R&D" } }
+                    About = $"Working as a project manager in large Russian companies. Prefer R&D projects management. Experinced in most of modern frameworks and methodologies like SCRUM, Agile, etc.{Environment.NewLine}Project manager at Skolkovo (3 years){Environment.NewLine}SCRUM master at SBER (1 year)",
+                    SkillTags = "Project management,R&D"
                 },
-
                 new Specialist
                 {
                     FirstName = "Lev",
@@ -92,14 +88,10 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
                     LastName = spec.LastName,
                     IdentityId = createdAgentUser.Id,
                     Bio = spec.Bio,
-                    Skills = spec.Skills,
-                    Experience = spec.Experience,
+                    About = spec.About,
+                    SkillTags = spec.SkillTags,
                     CountryId = country.Id
                 };
-
-                var tmpTagsSet = spec.SkillTags.Select(t => t.Name).ToHashSet();
-                var skillTags = await _context.SkillTags.Where(s => tmpTagsSet.Contains(s.Name)).ToListAsync();
-                specialist.SkillTags = skillTags;
 
                 _context.Specialists.Add(specialist);
                 await _context.SaveChangesAsync(default);

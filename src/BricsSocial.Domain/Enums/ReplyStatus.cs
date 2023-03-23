@@ -8,8 +8,8 @@ namespace BricsSocial.Domain.Enums
 {
     public enum ReplyStatus
     {
-        Waiting = 0,
-        Approve = 1,
-        Reject = 2,
+        Pending = 0,
+        Approved = 1,
+        Rejected = 2,
     }
 }

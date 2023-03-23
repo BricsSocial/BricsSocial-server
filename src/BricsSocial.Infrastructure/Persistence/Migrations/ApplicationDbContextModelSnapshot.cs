@@ -118,26 +118,18 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.Property<int?>("AgentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AgentMessage")
-                        .HasMaxLength(1500)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("SpecialistId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("ReplyStatus")
+                    b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(0);
 
-                    b.Property<int>("ReplyType")
+                    b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SpecialistId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SpecialistMessage")
-                        .HasMaxLength(1500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("VacancyId")
+                    b.Property<int>("VacancyId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -151,30 +143,18 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.ToTable("Replies");
                 });
 
-            modelBuilder.Entity("BricsSocial.Domain.Entities.SkillTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("SkillTags");
-                });
-
             modelBuilder.Entity("BricsSocial.Domain.Entities.Specialist", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("About")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(10000)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.Property<string>("Bio")
                         .IsRequired()
@@ -189,13 +169,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("Experience")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10000)
-                        .HasColumnType("TEXT")
-                        .HasDefaultValue("");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -215,10 +188,10 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .HasMaxLength(2097152)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Skills")
+                    b.Property<string>("SkillTags")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(10000)
+                        .HasMaxLength(409)
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
@@ -255,6 +228,13 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(10000)
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("SkillTags")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(409)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
@@ -458,36 +438,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SkillTagSpecialist", b =>
-                {
-                    b.Property<int>("SkillTagsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SpecialistsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("SkillTagsId", "SpecialistsId");
-
-                    b.HasIndex("SpecialistsId");
-
-                    b.ToTable("SkillTagSpecialist");
-                });
-
-            modelBuilder.Entity("SkillTagVacancy", b =>
-                {
-                    b.Property<int>("SkillTagsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("VacanciesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("SkillTagsId", "VacanciesId");
-
-                    b.HasIndex("VacanciesId");
-
-                    b.ToTable("SkillTagVacancy");
-                });
-
             modelBuilder.Entity("BricsSocial.Domain.Entities.Agent", b =>
                 {
                     b.HasOne("BricsSocial.Domain.Entities.Company", "Company")
@@ -524,11 +474,15 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
 
                     b.HasOne("BricsSocial.Domain.Entities.Specialist", "Specialist")
                         .WithMany("Replies")
-                        .HasForeignKey("SpecialistId");
+                        .HasForeignKey("SpecialistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BricsSocial.Domain.Entities.Vacancy", "Vacancy")
                         .WithMany("Replies")
-                        .HasForeignKey("VacancyId");
+                        .HasForeignKey("VacancyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Agent");
 
@@ -612,36 +566,6 @@ namespace BricsSocial.Infrastructure.Persistence.Migrations
                     b.HasOne("BricsSocial.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SkillTagSpecialist", b =>
-                {
-                    b.HasOne("BricsSocial.Domain.Entities.SkillTag", null)
-                        .WithMany()
-                        .HasForeignKey("SkillTagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BricsSocial.Domain.Entities.Specialist", null)
-                        .WithMany()
-                        .HasForeignKey("SpecialistsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SkillTagVacancy", b =>
-                {
-                    b.HasOne("BricsSocial.Domain.Entities.SkillTag", null)
-                        .WithMany()
-                        .HasForeignKey("SkillTagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BricsSocial.Domain.Entities.Vacancy", null)
-                        .WithMany()
-                        .HasForeignKey("VacanciesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

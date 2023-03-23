@@ -16,8 +16,6 @@ namespace BricsSocial.Infrastructure.Persistence
         public DbSet<Vacancy> Vacancies => Set<Vacancy>();
         public DbSet<Reply> Replies => Set<Reply>();
 
-        public DbSet<SkillTag> SkillTags => Set<SkillTag>();
-
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options)
             : base(options)

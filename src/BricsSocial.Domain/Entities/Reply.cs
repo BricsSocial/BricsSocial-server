@@ -9,19 +9,16 @@ namespace BricsSocial.Domain.Entities
 {
     public sealed class Reply : EntityBase
     {
-        public string SpecialistMessage { get; set; }
-        public string AgentMessage { get; set; }
-
         public int? AgentId { get; set; }
         public Agent Agent { get; set; }
-        public int? SpecialistId { get; set; }
+        public int SpecialistId { get; set; }
         public Specialist Specialist { get; set; }
         
-        public int? VacancyId { get; set; }
+        public int VacancyId { get; set; }
         public Vacancy Vacancy { get; set; }
 
-        public ReplyStatus ReplyStatus { get; set; }
-        public ReplyType ReplyType { get; set; }
+        public ReplyStatus Status { get; set; }
+        public ReplyType Type { get; set; }
 
         public static class Invariants
         {
