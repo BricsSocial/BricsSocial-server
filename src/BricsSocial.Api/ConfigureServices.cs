@@ -1,5 +1,7 @@
 ﻿using BricsSocial.Api.Services;
+using BricsSocial.Api.Swagger;
 using BricsSocial.Application.Common.Interfaces;
+using BricsSocial.Application.Common.Security;
 using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,9 +9,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System.ComponentModel;
 using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace BricsSocial.Api
 {
@@ -25,6 +30,7 @@ namespace BricsSocial.Api
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();
+            services.AddCors();
 
             // Customise default API behaviour
             services.Configure<ApiBehaviorOptions>(options =>
@@ -41,7 +47,7 @@ namespace BricsSocial.Api
             services.AddSwaggerGen(s =>
             {
                 s.SwaggerDoc("v1", new OpenApiInfo() { Title = "BricsSocial API", Version = "v1" });
-                s.CustomSchemaIds(x => x.GetCustomAttributes(false).OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
+                //s.CustomSchemaIds(x => x.GetCustomAttributes(false).OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
 
                 //s.ExampleFilters();
 
@@ -72,8 +78,13 @@ namespace BricsSocial.Api
                 //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 //var xmlPath = AppContext.BaseDirectory + "\\" + xmlFile;
                 //s.IncludeXmlComments(xmlPath);
-            });
 
+                s.OperationFilter<AppendCustomAuthorizeToSummaryOperationFilter>();
+
+                s.DocumentFilter<SwaggerEnumDescriptionDocumentFilter>();
+
+                s.CustomSchemaIds(CustomSchemaIdGenerator.ConstructSchemaId);
+            });
             
             services.TryAddTransient<IValidatorFactory, ServiceProviderValidatorFactory>(); // update
             services.AddFluentValidationRulesToSwagger();

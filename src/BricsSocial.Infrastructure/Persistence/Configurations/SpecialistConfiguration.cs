@@ -1,4 +1,6 @@
-﻿using BricsSocial.Domain.Entities;
+﻿using BricsSocial.Application.Common.Models;
+using BricsSocial.Domain.Entities;
+using BricsSocial.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,15 +15,35 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Specialist> builder)
         {
-            builder.HasOne(s => s.Resume).WithOne(r => r.Specialist).HasForeignKey<Resume>(r => r.SpecialistId);
-            builder.HasMany(s => s.FromFriendRequests).WithOne(f => f.FromSpecialist);//.HasForeignKey(f => f.FromSpecialistId);
-            builder.HasMany(s => s.ToFriendRequests).WithOne(f => f.ToSpecialist);//.HasForeignKey(f => f.ToSpecialistId);
+            builder.HasOne<ApplicationUser>().WithOne().HasForeignKey<Specialist>(s => s.IdentityId);
             builder.Property(s => s.IdentityId)
                 .IsRequired();
-            builder.Property(s => s.About)
-                .HasMaxLength(1500);
+            builder.Property(s => s.Email)
+                .IsRequired();
+            builder.Property(s => s.FirstName)
+                .HasMaxLength(Specialist.Invariants.FirstNameMaxLength)
+                .IsRequired();
+            builder.Property(s => s.LastName)
+                .HasMaxLength(Specialist.Invariants.LastNameMaxLength)
+                .IsRequired();
+
+            builder.Property(s => s.Bio)
+                .HasMaxLength(Specialist.Invariants.BioMaxLength)
+                .HasDefaultValue(string.Empty)
+                .IsRequired();
+            builder.Property(r => r.About)
+                .HasMaxLength(Specialist.Invariants.AboutMaxLength)
+                .HasDefaultValue(string.Empty)
+                .IsRequired();
+            builder.Property(r => r.SkillTags)
+                .HasMaxLength(SkillTag.Invariants.SkillTagsMaxLength)
+                .HasDefaultValue(string.Empty)
+                .IsRequired();
+
             builder.Property(c => c.Photo)
-                .HasMaxLength(100_000);
+                .HasMaxLength(Specialist.Invariants.PhotoMaxLength)
+                .IsRequired(false);
+            
         }
     }
 }

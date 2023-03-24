@@ -1,6 +1,3 @@
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using BricsSocial.Api;
 using BricsSocial.Application;
 using BricsSocial.Infrastructure;
@@ -30,14 +27,15 @@ else
     app.UseHsts();
 }
 
-// Initialise and seed database
+// Initialize and seed database
 using (var scope = app.Services.CreateScope())
 {
     var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
-    await initialiser.InitialiseAsync();
+    await initialiser.InitializeAsync();
     await initialiser.SeedAsync();
 }
 
+app.UseCors(builder => builder.AllowAnyOrigin());
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -50,7 +48,6 @@ app.UseSwaggerUI(c =>
 app.UseRouting();
 
 app.UseAuthentication();
-app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapControllerRoute(

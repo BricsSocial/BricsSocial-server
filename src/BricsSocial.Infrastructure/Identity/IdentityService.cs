@@ -41,9 +41,7 @@ public class IdentityService : IIdentityService
         {
             UserId = user.Id,
             Email = user.Email,
-            Role = userRoles.FirstOrDefault(),
-            FirstName = user.FirstName,
-            LastName = user.LastName,
+            Role = userRoles.FirstOrDefault()
         };
         return userInfo;
     }
@@ -60,19 +58,26 @@ public class IdentityService : IIdentityService
         return passwordCheck;
     }
 
-    public async Task<(Result Result, string UserId)> CreateUserAsync(UserInfo userInfo, string password)
+    public async Task<(Result Result, string? UserId)> CreateUserAsync(UserInfo userInfo, string password)
     {
         var user = new ApplicationUser
         {
             UserName = userInfo.Email,
-            Email = userInfo.Email,
-            FirstName = userInfo.FirstName,
-            LastName = userInfo.LastName
+            Email = userInfo.Email
         };
 
-        var result = await _userManager.CreateAsync(user, password);
+        var createUserResult = await _userManager.CreateAsync(user, password);
+        if (!createUserResult.Succeeded)
+            return (createUserResult.ToApplicationResult(), null);
 
-        return (result.ToApplicationResult(), user.Id);
+        var addToRoleResult = await _userManager.AddToRoleAsync(user, userInfo.Role);
+        if (!addToRoleResult.Succeeded)
+        {
+            await _userManager.DeleteAsync(user);
+            return (addToRoleResult.ToApplicationResult(), null);
+        }
+
+        return (createUserResult.ToApplicationResult(), user.Id);
     }
 
     public async Task<Result> DeleteUserAsync(string userId)

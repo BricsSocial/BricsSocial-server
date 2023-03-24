@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using ValidationException = BricsSocial.Application.Common.Exceptions.ValidationException;
+using ValidationException = BricsSocial.Application.Common.Exceptions.Common.ValidationException;
 
 namespace BricsSocial.Application.Common.Behaviours;
 

@@ -1,6 +1,7 @@
 ﻿using BricsSocial.Application.Common.Security;
 using BricsSocial.Domain.Entities;
 using BricsSocial.Infrastructure.Identity;
+using BricsSocial.Infrastructure.Persistence.Seeding;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -19,26 +20,40 @@ namespace BricsSocial.Infrastructure.Persistence
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
+        private readonly IEnumerable<ISeeder> _seeders;
+
         public ApplicationDbContextInitializer(ILogger<ApplicationDbContextInitializer> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+
+            _seeders = new List<ISeeder>
+            {
+                new RoleSeeder(_roleManager),
+                new AdminSeeder(_userManager),
+                new CountrySeeder(_context),
+                
+                new CompanySeeder(_context),
+                new AgentSeeder(_context, _userManager),
+
+                new SpecialistSeeder(_context, _userManager),
+            };
         }
 
-        public async Task InitialiseAsync()
+        public async Task InitializeAsync()
         {
             try
             {
-                if (_context.Database.IsSqlServer() || _context.Database.IsSqlite())
+                if (_context.Database.IsSqlite())
                 {
                     await _context.Database.MigrateAsync();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while initialising the database.");
+                _logger.LogError(ex, "An error occurred while initializing the database.");
                 throw;
             }
         }
@@ -47,7 +62,10 @@ namespace BricsSocial.Infrastructure.Persistence
         {
             try
             {
-                await TrySeedAsync();
+                foreach(var seeder in _seeders)
+                {
+                    await seeder.SeedAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -56,116 +74,117 @@ namespace BricsSocial.Infrastructure.Persistence
             }
         }
 
-        public async Task TrySeedAsync()
-        {
-            await SeedRolesAsync();
+        //public async Task TrySeedAsync()
+        //{
+        //    await SeedRolesAsync();
 
-            await SeedAdminAsync();
+        //    await SeedAdminAsync();
 
-            await SeedCountriesAsync();
+        //    await SeedCountriesAsync();
 
-            await SeedCompaniesAsync();
+        //    await SeedCompaniesAsync();
 
-            await SeedAgentsAsync();
-        }
+        //    await SeedAgentsAsync();
+        //}
 
-        public async Task SeedRolesAsync()
-        {
-            // Default roles
-            var administratorRole = new IdentityRole(UserRoles.Administrator);
-            var agentRole = new IdentityRole(UserRoles.Agent);
-            var specialistRole = new IdentityRole(UserRoles.Specialist);
+        //public async Task SeedRolesAsync()
+        //{
+        //    // Default roles
+        //    var administratorRole = new IdentityRole(UserRoles.Administrator);
+        //    var agentRole = new IdentityRole(UserRoles.Agent);
+        //    var specialistRole = new IdentityRole(UserRoles.Specialist);
 
-            if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
-                await _roleManager.CreateAsync(administratorRole);
-            if (_roleManager.Roles.All(r => r.Name != agentRole.Name))
-                await _roleManager.CreateAsync(agentRole);
-            if (_roleManager.Roles.All(r => r.Name != specialistRole.Name))
-                await _roleManager.CreateAsync(specialistRole);
-        }
+        //    if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
+        //        await _roleManager.CreateAsync(administratorRole);
+        //    if (_roleManager.Roles.All(r => r.Name != agentRole.Name))
+        //        await _roleManager.CreateAsync(agentRole);
+        //    if (_roleManager.Roles.All(r => r.Name != specialistRole.Name))
+        //        await _roleManager.CreateAsync(specialistRole);
+        //}
 
-        public async Task SeedAdminAsync()
-        {
-            // Default users
-            var administratorUser = new ApplicationUser
-            {
-                UserName = "admin@brics",
-                Email = "admin@brics"
-            };
+        //public async Task SeedAdminAsync()
+        //{
+        //    // Default users
+        //    var administratorUser = new ApplicationUser
+        //    {
+        //        UserName = "admin@brics",
+        //        Email = "admin@brics"
+        //    };
 
-            if (_userManager.Users.All(u => u.UserName != administratorUser.UserName))
-            {
-                var createResult = await _userManager.CreateAsync(administratorUser, "Admin123!");
-                await _userManager.AddToRolesAsync(administratorUser, new[] { UserRoles.Administrator });
-            }
-        }
+        //    if (_userManager.Users.All(u => u.UserName != administratorUser.UserName))
+        //    {
+        //        var createResult = await _userManager.CreateAsync(administratorUser, "Admin123!");
+        //        await _userManager.AddToRolesAsync(administratorUser, new[] { UserRoles.Administrator });
+        //    }
+        //}
 
-        public async Task SeedCountriesAsync()
-        {
-            if (_context.Countries.Any())
-                return;
+        //public async Task SeedCountriesAsync()
+        //{
+        //    if (_context.Countries.Any())
+        //        return;
             
-            var countries = new List<Country>
-            {
-                new Country { Name = "Brasil" },
-                new Country { Name = "Russia" },
-                new Country { Name = "India" },
-                new Country { Name = "China" },
-                new Country { Name = "South Africa" },
-            };
+        //    var countries = new List<Country>
+        //    {
+        //        new Country { Name = "Brasil" },
+        //        new Country { Name = "Russia" },
+        //        new Country { Name = "India" },
+        //        new Country { Name = "China" },
+        //        new Country { Name = "South Africa" },
+        //    };
 
-            _context.Countries.AddRange(countries);
+        //    _context.Countries.AddRange(countries);
 
-            await _context.SaveChangesAsync();
-        }
+        //    await _context.SaveChangesAsync();
+        //}
 
-        public async Task SeedCompaniesAsync()
-        {
-            if (_context.Companies.Any())
-                return;
+        //public async Task SeedCompaniesAsync()
+        //{
+        //    if (_context.Companies.Any())
+        //        return;
 
-            var country = _context.Countries.Where(c => c.Name == "Russia").First();
+        //    var country = _context.Countries.Where(c => c.Name == "Russia").First();
 
-            var companies = new List<Company>
-            {
-                new Company { Name = "Gazprom", Description = "Leading Oil and Gas company", CountryId = country.Id }
-            };
+        //    var companies = new List<Company>
+        //    {
+        //        new Company { Name = "Gazprom", Description = "Leading Oil and Gas company", CountryId = country.Id }
+        //    };
 
-            _context.Companies.AddRange(companies);
+        //    _context.Companies.AddRange(companies);
 
-            await _context.SaveChangesAsync();
-        }
+        //    await _context.SaveChangesAsync();
+        //}
 
-        public async Task SeedAgentsAsync()
-        {
-            if (_context.Agents.Any())
-                return;
+        //public async Task SeedAgentsAsync()
+        //{
+        //    if (_context.Agents.Any())
+        //        return;
 
-            var company = _context.Companies.Where(c => c.Name == "Gazprom").First();
+        //    var company = _context.Companies.Where(c => c.Name == "Gazprom").First();
 
-            var agentUser = new ApplicationUser
-            {
-                UserName = "agent@gazprom",
-                Email = "agent@gazprom",
-                FirstName = "Ivan",
-                LastName = "Ivanov",
-            };
-            if (_userManager.Users.All(u => u.Email != agentUser.Email))
-            {
-                await _userManager.CreateAsync(agentUser, "Agent123!");
-                await _userManager.AddToRolesAsync(agentUser, new[] { UserRoles.Agent });
-            }
+        //    var agentUser = new ApplicationUser
+        //    {
+        //        UserName = "agent@gazprom",
+        //        Email = "agent@gazprom"
+        //    };
+        //    if (_userManager.Users.All(u => u.Email != agentUser.Email))
+        //    {
+        //        await _userManager.CreateAsync(agentUser, "Agent123!");
+        //        await _userManager.AddToRolesAsync(agentUser, new[] { UserRoles.Agent });
+        //    }
 
-            var createdAgentUser = _userManager.Users.Where(u => u.Email == agentUser.Email).First();
-            var agent = new Agent
-            {
-                IdentityId = createdAgentUser.Id,
-                Position = "HR manager",
-                CompanyId = company.Id
-            };
+        //    var createdAgentUser = _userManager.Users.Where(u => u.Email == agentUser.Email).First();
+        //    var agent = new Agent
+        //    {
+        //        Email = agentUser.Email,
+        //        FirstName = "Ivan",
+        //        LastName = "Ivanov",
+        //        IdentityId = createdAgentUser.Id,
+        //        Position = "HR manager",
+        //        CompanyId = company.Id
+        //    };
 
-            _context.Agents.Add(agent);
-            await _context.SaveChangesAsync();
-        }
+        //    _context.Agents.Add(agent);
+        //    await _context.SaveChangesAsync();
+        //}
     }
 }

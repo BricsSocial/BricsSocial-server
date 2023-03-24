@@ -14,13 +14,18 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Vacancy> builder)
         {
             builder.Property(v => v.Name)
-                .HasMaxLength(100)
+                .HasMaxLength(Vacancy.Invariants.NameMaxLength)
                 .IsRequired();
             builder.Property(t => t.Requirements)
-                .HasMaxLength(1500)
+                .HasMaxLength(Vacancy.Invariants.RequirementsMaxLength)
                 .IsRequired();
             builder.Property(t => t.Offerings)
-                .HasMaxLength(1500)
+                .HasMaxLength(Vacancy.Invariants.OfferingsMaxLength)
+                .IsRequired();
+
+            builder.Property(r => r.SkillTags)
+                .HasMaxLength(SkillTag.Invariants.SkillTagsMaxLength)
+                .HasDefaultValue(string.Empty)
                 .IsRequired();
         }
     }

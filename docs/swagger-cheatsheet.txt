@@ -1,0 +1,6 @@
+swagger tofile --output docs\swagger-specification.json src\_Debug\BricsSocial.Api\BricsSocial.Api.dll v1
+
+
+<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="swagger tofile --output $(SolutionDir)docs\swagger-specification.json $(TargetDir)$(ProjectName).dll v1" />
+</Target>

@@ -5,20 +5,13 @@ namespace BricsSocial.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
+    DbSet<Country> Countries { get; }
     DbSet<Specialist> Specialists { get; }
     DbSet<Agent> Agents { get; }
-    DbSet<Country> Countries { get; }
     DbSet<Company> Companies { get; }
 
     DbSet<Vacancy> Vacancies { get; }
-    DbSet<VacancyReply> VacancyReplies { get; }
-    DbSet<VacancyReplyFeedback> VacancyReplyFeedbacks { get; }
-
-    DbSet<Resume> Resumes { get; }
-    DbSet<ResumeReply> ResumeReplies { get; }
-    DbSet<ResumeReplyFeedback> ResumeReplyFeedbacks { get; }
-
-    DbSet<FriendRequest> FriendRequests { get; }
+    DbSet<Reply> Replies { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

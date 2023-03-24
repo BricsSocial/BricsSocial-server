@@ -1,6 +1,6 @@
 ﻿using BricsSocial.Api.Utils;
-using BricsSocial.Application.Common.Exceptions;
-
+using BricsSocial.Application.Common.Exceptions.Application;
+using BricsSocial.Application.Common.Exceptions.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -14,10 +14,15 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
+                // Common
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
+                { typeof(BadRequestException), HandleBadRequestException },
+
+                // Application
+                { typeof(AgentBelongsToOtherCompany), HandleForbiddenAccessException },
             };
     }
 
@@ -77,6 +82,21 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         context.ExceptionHandled = true;
     }
 
+    private void HandleBadRequestException(ExceptionContext context)
+    {
+        var exception = (BadRequestException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Detail = exception.Message
+        };
+
+        context.Result = new BadRequestObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+
     private void HandleInvalidModelStateException(ExceptionContext context)
     {
         var details = new ValidationProblemDetails(context.ModelState)
@@ -128,7 +148,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         {
             Status = StatusCodes.Status403Forbidden,
             Title = "Forbidden",
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3"
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3",
+            Detail = context.Exception.GetMessage()
         };
 
         context.Result = new ObjectResult(details)

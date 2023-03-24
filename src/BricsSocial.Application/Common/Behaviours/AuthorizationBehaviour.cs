@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using BricsSocial.Application.Common.Exceptions;
+using BricsSocial.Application.Common.Exceptions.Common;
 using BricsSocial.Application.Common.Interfaces;
 using BricsSocial.Application.Common.Security;
 using MediatR;

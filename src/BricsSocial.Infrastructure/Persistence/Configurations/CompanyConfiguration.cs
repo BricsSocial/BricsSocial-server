@@ -14,13 +14,14 @@ namespace BricsSocial.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Company> builder)
         {
             builder.Property(c => c.Name)
-                .HasMaxLength(100)
+                .HasMaxLength(Company.Invariants.NameMaxLength)
                 .IsRequired();
             builder.Property(c => c.Description)
-                .HasMaxLength(3000)
+                .HasMaxLength(Company.Invariants.DescriptionMaxLength)
                 .IsRequired();
             builder.Property(c => c.Logo)
-                .HasMaxLength(100_000);
+                .HasMaxLength(Company.Invariants.LogoMaxLength)
+                .IsRequired(false);
         }
     }
 }
