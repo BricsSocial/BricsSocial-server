@@ -31,11 +31,13 @@ services:
     #  - postgres
 
   bricssocial.api:
-    image: ${DOCKER_REGISTRY-}bricssocialapi
+    image: cr.yandex/crp6f5f9lspegg40i8l1/bricssocialapi:20230325022528
     restart: always
     ports:
       - 80:80
       - 443:443
+    depends_on:
+      - postgres
     environment:
       - BricsConnectionString=Username=postgres;Password=postgres;Host=postgres;Port=5432;Database=bricsdb
     #networks:
