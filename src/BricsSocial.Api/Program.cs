@@ -27,6 +27,7 @@ else
     app.UseHsts();
 }
 
+
 // Initialize and seed database
 using (var scope = app.Services.CreateScope())
 {

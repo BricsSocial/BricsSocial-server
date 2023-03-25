@@ -17,16 +17,6 @@ namespace BricsSocial.Api.Controllers
 {
     public class VacanciesController : ApiControllerBase
     {
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<VacancyDto>> Get(int id, CancellationToken cancellationToken)
-        {
-            return Ok(await Mediator.Send(new GetVacancyQuery { Id = id }, cancellationToken));
-        }
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -34,6 +24,16 @@ namespace BricsSocial.Api.Controllers
         public async Task<ActionResult<PaginatedList<VacancyDto>>> Get([FromQuery] GetVacanciesQuery request, CancellationToken cancellationToken)
         {
             return Ok(await Mediator.Send(request, cancellationToken));
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<VacancyDto>> GetById(int id, CancellationToken cancellationToken)
+        {
+            return Ok(await Mediator.Send(new GetVacancyQuery { Id = id }, cancellationToken));
         }
 
         [HttpPost]

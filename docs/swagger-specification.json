@@ -10,6 +10,7 @@
         "tags": [
           "Agents"
         ],
+        "operationId": "AgentsGet",
         "parameters": [
           {
             "name": "CompanyId",
@@ -70,6 +71,7 @@
           "Agents"
         ],
         "summary": " (Auth roles: Administrator)",
+        "operationId": "AgentsCreate",
         "requestBody": {
           "content": {
             "application/json": {
@@ -131,6 +133,7 @@
         "tags": [
           "Agents"
         ],
+        "operationId": "AgentsGetById",
         "parameters": [
           {
             "name": "id",
@@ -184,6 +187,7 @@
           "Agents"
         ],
         "summary": " (Auth roles: Agent)",
+        "operationId": "AgentsUpdate",
         "parameters": [
           {
             "name": "id",
@@ -266,6 +270,7 @@
           "Agents"
         ],
         "summary": " (Auth roles: Administrator, Agent)",
+        "operationId": "AgentsDelete",
         "parameters": [
           {
             "name": "id",
@@ -318,11 +323,46 @@
         }
       }
     },
+    "/api/agents/current": {
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": " (Auth roles: Agent)",
+        "operationId": "AgentsGetCurrent",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
     "/api/auth/login": {
       "post": {
         "tags": [
           "Auth"
         ],
+        "operationId": "AuthLogin",
         "requestBody": {
           "content": {
             "application/json": {
@@ -379,11 +419,135 @@
         }
       }
     },
+    "/api/companies": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "operationId": "CompaniesGet",
+        "parameters": [
+          {
+            "name": "CountryId",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedList<CompanyDto>"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": " (Auth roles: Administrator)",
+        "operationId": "CompaniesCreate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompanyCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompanyCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompanyCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
     "/api/companies/{id}": {
       "get": {
         "tags": [
           "Companies"
         ],
+        "operationId": "CompaniesGetById",
         "parameters": [
           {
             "name": "id",
@@ -437,6 +601,7 @@
           "Companies"
         ],
         "summary": " (Auth roles: Agent)",
+        "operationId": "CompaniesUpdate",
         "parameters": [
           {
             "name": "id",
@@ -519,6 +684,7 @@
           "Companies"
         ],
         "summary": " (Auth roles: Administrator)",
+        "operationId": "CompaniesDelete",
         "parameters": [
           {
             "name": "id",
@@ -571,132 +737,12 @@
         }
       }
     },
-    "/api/companies": {
-      "get": {
-        "tags": [
-          "Companies"
-        ],
-        "parameters": [
-          {
-            "name": "CountryId",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedList<CompanyDto>"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Companies"
-        ],
-        "summary": " (Auth roles: Administrator)",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCompanyCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCompanyCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCompanyCommand"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CompanyDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      }
-    },
     "/api/countries": {
       "get": {
         "tags": [
           "Countries"
         ],
+        "operationId": "CountriesGet",
         "responses": {
           "200": {
             "description": "Success",
@@ -722,6 +768,7 @@
         "tags": [
           "Specialists"
         ],
+        "operationId": "SpecialistsGet",
         "parameters": [
           {
             "name": "CountryId",
@@ -791,6 +838,7 @@
         "tags": [
           "Specialists"
         ],
+        "operationId": "SpecialistsCreate",
         "requestBody": {
           "content": {
             "application/json": {
@@ -852,6 +900,7 @@
         "tags": [
           "Specialists"
         ],
+        "operationId": "SpecialistsGetById",
         "parameters": [
           {
             "name": "id",
@@ -905,6 +954,7 @@
           "Specialists"
         ],
         "summary": " (Auth roles: Specialist)",
+        "operationId": "SpecialistsUpdate",
         "parameters": [
           {
             "name": "id",
@@ -987,6 +1037,7 @@
           "Specialists"
         ],
         "summary": " (Auth roles: Administrator, Specialist)",
+        "operationId": "SpecialistsDelete",
         "parameters": [
           {
             "name": "id",
@@ -1039,12 +1090,47 @@
         }
       }
     },
+    "/api/specialists/current": {
+      "get": {
+        "tags": [
+          "Specialists"
+        ],
+        "summary": " (Auth roles: Specialist)",
+        "operationId": "SpecialistsGetCurrent",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecialistDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
     "/api/specialists/replies": {
       "post": {
         "tags": [
           "Specialists"
         ],
         "summary": " (Auth roles: Agent)",
+        "operationId": "SpecialistsCreateReply",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1105,6 +1191,7 @@
           "Specialists"
         ],
         "summary": " (Auth roles: Specialist)",
+        "operationId": "SpecialistsGetReplies",
         "parameters": [
           {
             "name": "CompanyId",
@@ -1206,6 +1293,7 @@
           "Specialists"
         ],
         "summary": " (Auth roles: Specialist)",
+        "operationId": "SpecialistsUpdateReply",
         "parameters": [
           {
             "name": "id",
@@ -1274,203 +1362,12 @@
         }
       }
     },
-    "/api/vacancies/{id}": {
-      "get": {
-        "tags": [
-          "Vacancies"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VacancyDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Vacancies"
-        ],
-        "summary": " (Auth roles: Agent)",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVacancyCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVacancyCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVacancyCommand"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VacancyDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Vacancies"
-        ],
-        "summary": " (Auth roles: Administrator, Agent)",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      }
-    },
     "/api/vacancies": {
       "get": {
         "tags": [
           "Vacancies"
         ],
+        "operationId": "VacanciesGet",
         "parameters": [
           {
             "name": "CountryId",
@@ -1560,6 +1457,7 @@
           "Vacancies"
         ],
         "summary": " (Auth roles: Agent)",
+        "operationId": "VacanciesCreate",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1616,12 +1514,208 @@
         }
       }
     },
+    "/api/vacancies/{id}": {
+      "get": {
+        "tags": [
+          "Vacancies"
+        ],
+        "operationId": "VacanciesGetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VacancyDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Vacancies"
+        ],
+        "summary": " (Auth roles: Agent)",
+        "operationId": "VacanciesUpdate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVacancyCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVacancyCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVacancyCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VacancyDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Vacancies"
+        ],
+        "summary": " (Auth roles: Administrator, Agent)",
+        "operationId": "VacanciesDelete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
     "/api/vacancies/replies": {
       "post": {
         "tags": [
           "Vacancies"
         ],
         "summary": " (Auth roles: Specialist)",
+        "operationId": "VacanciesCreateReply",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1682,6 +1776,7 @@
           "Vacancies"
         ],
         "summary": " (Auth roles: Agent)",
+        "operationId": "VacanciesGetReplies",
         "parameters": [
           {
             "name": "ByAgent",
@@ -1782,6 +1877,7 @@
           "Vacancies"
         ],
         "summary": " (Auth roles: Agent)",
+        "operationId": "VacanciesUpdateReply",
         "parameters": [
           {
             "name": "id",

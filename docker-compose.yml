@@ -32,10 +32,6 @@ services:
 
   bricssocial.api:
     image: ${DOCKER_REGISTRY-}bricssocialapi
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
     environment:
       - BricsConnectionString=Username=postgres;Password=postgres;Host=postgres;Port=5432;Database=bricsdb
     #networks:
