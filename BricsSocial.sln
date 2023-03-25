@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BricsSocial.Api", "src\Bric
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BricsSocial.Application", "src\BricsSocial.Application\BricsSocial.Application.csproj", "{29063B04-E844-4CC1-994C-70E7CB48040B}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{29063B04-E844-4CC1-994C-70E7CB48040B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29063B04-E844-4CC1-994C-70E7CB48040B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29063B04-E844-4CC1-994C-70E7CB48040B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -22,8 +22,8 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
         {
             var administratorUser = new ApplicationUser
             {
-                UserName = "admin@brics",
-                Email = "admin@brics"
+                UserName = "admin@brics.org",
+                Email = "admin@brics.org"
             };
 
             if (_userManager.Users.All(u => u.UserName != administratorUser.UserName))
