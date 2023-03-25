@@ -36,7 +36,12 @@ using (var scope = app.Services.CreateScope())
     await initialiser.SeedAsync();
 }
 
-app.UseCors(builder => builder.AllowAnyOrigin());
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin();
+    builder.AllowAnyMethod();
+    builder.AllowAnyHeader();
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
