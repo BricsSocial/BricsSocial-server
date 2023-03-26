@@ -21,6 +21,7 @@ namespace BricsSocial.Application.Agents.RegisterAgent
         public string? LastName { get; init; }
         public string? Email { get; init; }
         public string? Password { get; init; }
+        public string? Position { get; init; }
         public int? CompanyId { get; init; }
     }
 
@@ -59,6 +60,7 @@ namespace BricsSocial.Application.Agents.RegisterAgent
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 IdentityId = userId,
+                Position = request.Position,
                 CompanyId = request.CompanyId.Value,
             };
             

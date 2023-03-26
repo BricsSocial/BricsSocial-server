@@ -22,6 +22,9 @@ namespace BricsSocial.Application.Agents.RegisterAgent
             RuleFor(v => v.LastName)
                 .NotEmpty()
                 .Length(Agent.Invariants.LastNameMinLength, Agent.Invariants.LastNameMaxLength);
+            RuleFor(v => v.Position)
+                .NotEmpty()
+                .Length(Agent.Invariants.PositionMinLength, Agent.Invariants.PositionMaxLength);
             RuleFor(v => v.CompanyId)
                 .NotNull();
         }

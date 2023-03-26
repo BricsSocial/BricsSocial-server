@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BricsSocial.Api", "src\Bric
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BricsSocial.Application", "src\BricsSocial.Application\BricsSocial.Application.csproj", "{29063B04-E844-4CC1-994C-70E7CB48040B}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BricsSocial.Api.Client.TestApp", "..\src\BricsSocial.Api.Client.TestApp\BricsSocial.Api.Client.TestApp.csproj", "{40511C5C-AA9C-4238-B870-D250EB13FB77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,14 @@ Global
 		{29063B04-E844-4CC1-994C-70E7CB48040B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29063B04-E844-4CC1-994C-70E7CB48040B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29063B04-E844-4CC1-994C-70E7CB48040B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40511C5C-AA9C-4238-B870-D250EB13FB77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40511C5C-AA9C-4238-B870-D250EB13FB77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40511C5C-AA9C-4238-B870-D250EB13FB77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40511C5C-AA9C-4238-B870-D250EB13FB77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +56,7 @@ Global
 		{05E2CBA5-83D6-49CC-BDE6-7DA32C31C499} = {28BE728F-1C64-46B0-A91A-5DF02AD67895}
 		{55833978-805E-4F8D-8A5D-13A6912147D2} = {28BE728F-1C64-46B0-A91A-5DF02AD67895}
 		{29063B04-E844-4CC1-994C-70E7CB48040B} = {28BE728F-1C64-46B0-A91A-5DF02AD67895}
+		{40511C5C-AA9C-4238-B870-D250EB13FB77} = {28BE728F-1C64-46B0-A91A-5DF02AD67895}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C5A70F5-8538-4E63-B158-0C6D5EF2BA18}

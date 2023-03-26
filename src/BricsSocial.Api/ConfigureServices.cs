@@ -83,7 +83,8 @@ namespace BricsSocial.Api
 
                 s.DocumentFilter<SwaggerEnumDescriptionDocumentFilter>();
 
-                s.CustomSchemaIds(CustomSchemaIdGenerator.ConstructSchemaId);
+                s.CustomSchemaIds(CustomSchemaIdGenerator.Generate);
+                s.CustomOperationIds(CustomOperationIdGenerator.Generate);
             });
             
             services.TryAddTransient<IValidatorFactory, ServiceProviderValidatorFactory>(); // update

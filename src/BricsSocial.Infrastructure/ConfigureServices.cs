@@ -30,7 +30,10 @@ namespace BricsSocial.Infrastructure
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                 {
-                    options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
+                    var connectionString = Environment.GetEnvironmentVariable("BricsConnectionString");
+                    options.UseNpgsql(connectionString,
+                        builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+                    //options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
                     //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     //    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
                 });   

@@ -3,6 +3,7 @@ using BricsSocial.Application.Agents.Common;
 using BricsSocial.Application.Agents.DeleteAgent;
 using BricsSocial.Application.Agents.GetAgent;
 using BricsSocial.Application.Agents.GetAgents;
+using BricsSocial.Application.Agents.GetCurrentAgent;
 using BricsSocial.Application.Agents.RegisterAgent;
 using BricsSocial.Application.Agents.UpdateAgent;
 using BricsSocial.Application.Common.Models;
@@ -26,15 +27,27 @@ namespace BricsSocial.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AgentDto>> Get(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<AgentDto>> GetById(int id, CancellationToken cancellationToken)
         {
             return Ok(await Mediator.Send(new GetAgentQuery { Id = id }, cancellationToken));
+        }
+
+        [HttpGet("current")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequestType(typeof(GetCurrentAgentQuery))]
+        public async Task<ActionResult<AgentDto>> GetCurrent(CancellationToken cancellationToken)
+        {
+            return Ok(await Mediator.Send(new GetCurrentAgentQuery(), cancellationToken));
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AgentDto>> Create(CreateAgentCommand request, CancellationToken cancellationToken)
         {
@@ -45,6 +58,7 @@ namespace BricsSocial.Api.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -59,6 +73,7 @@ namespace BricsSocial.Api.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

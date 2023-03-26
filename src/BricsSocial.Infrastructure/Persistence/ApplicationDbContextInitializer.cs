@@ -46,7 +46,7 @@ namespace BricsSocial.Infrastructure.Persistence
         {
             try
             {
-                if (_context.Database.IsSqlite())
+                if (!_context.Database.IsInMemory())
                 {
                     await _context.Database.MigrateAsync();
                 }
