@@ -15,14 +15,17 @@ namespace BricsSocial.Application.SkillTags.Utils
         {
             var tags = skillTags.Split(",");
             return
-                skillTags.Length >= SkillTag.Invariants.SkillTagsMinLength && skillTags.Length <= SkillTag.Invariants.SkillTagsMaxLength
+                skillTags.Length == 0 ||
+                (skillTags.Length >= SkillTag.Invariants.SkillTagsMinLength
+                && skillTags.Length <= SkillTag.Invariants.SkillTagsMaxLength
                 && tags.Length <= SkillTag.Invariants.SkillTagsMaxCount
-                && tags.All(t => t.Length >= SkillTag.Invariants.SkillTagMinLength && t.Length <= SkillTag.Invariants.SkillTagMaxLength);
+                && tags.All(t => t.Length >= SkillTag.Invariants.SkillTagMinLength && t.Length <= SkillTag.Invariants.SkillTagMaxLength)
+                );
         }
 
         public static string InvalidTagsMessage()
         {
-            return $"Skill tags string was invalid. It must be comma separated list of tags, each [{SkillTag.Invariants.SkillTagMinLength}, {SkillTag.Invariants.SkillTagMaxLength}] length, maximum {SkillTag.Invariants.SkillTagsMaxCount} tags";
+            return $"Skill tags string was invalid. It must be empty string or comma separated list of tags, each [{SkillTag.Invariants.SkillTagMinLength}, {SkillTag.Invariants.SkillTagMaxLength}] length, maximum {SkillTag.Invariants.SkillTagsMaxCount} tags";
         }
 
         public static List<string> ParseTags(string skillTags)
