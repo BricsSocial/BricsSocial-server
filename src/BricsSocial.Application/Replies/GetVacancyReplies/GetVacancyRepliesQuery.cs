@@ -49,7 +49,7 @@ namespace BricsSocial.Application.Replies.GetReplies
 
         public async Task<PaginatedList<ReplyDto>> Handle(GetVacancyRepliesQuery request, CancellationToken cancellationToken)
         {
-            var agent = await _agentService.GetAgentByUserId(_currentUser.UserId);
+            var agent = await _agentService.GetAgentByUserIdAsync(_currentUser.UserId);
 
             var replies = await _context.Replies
                 .Where(r => r.Vacancy.CompanyId == agent.CompanyId)

@@ -34,7 +34,7 @@ namespace BricsSocial.Application.Specialists.GetCurrentSpecialist
 
         public async Task<SpecialistDto> Handle(GetCurrentSpecialistQuery request, CancellationToken cancellationToken)
         {
-            var specialist = await _specialistService.GetSpecialistByUserId(_currentUser.UserId);
+            var specialist = await _specialistService.GetSpecialistByUserIdAsync(_currentUser.UserId);
 
             return _mapper.Map<SpecialistDto>(specialist);
         }

@@ -41,7 +41,7 @@ namespace BricsSocial.Application.Replies.UpdateVacancyReply
 
         public async Task<ReplyDto> Handle(UpdateVacancyReplyCommand request, CancellationToken cancellationToken)
         {
-            var agent = _agentService.GetAgentByUserId(_currentUser.UserId);
+            var agent = await _agentService.GetAgentByUserIdAsync(_currentUser.UserId);
 
             var reply = await _context.Replies
                 .Where(r => r.Id == request.Id)

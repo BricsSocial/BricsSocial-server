@@ -12,7 +12,7 @@ namespace BricsSocial.Application.Specialists.Services
 {
     public interface ISpecialistService
     {
-        Task<Specialist> GetSpecialistByUserId(string userId);
+        Task<Specialist> GetSpecialistByUserIdAsync(string userId);
     }
 
     public sealed class SpecialistService : ISpecialistService
@@ -24,7 +24,7 @@ namespace BricsSocial.Application.Specialists.Services
             _context = context;
         }
 
-        public async Task<Specialist> GetSpecialistByUserId(string userId)
+        public async Task<Specialist> GetSpecialistByUserIdAsync(string userId)
         {
             var specialist = await _context.Specialists
                 .AsNoTracking()

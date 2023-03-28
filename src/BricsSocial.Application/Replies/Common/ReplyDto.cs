@@ -14,6 +14,7 @@ namespace BricsSocial.Application.Replies.Common
 {
     public sealed class ReplyDto : IMapFrom<Reply>
     {
+        public int Id { get; set; }
         public int? AgentId { get; set; }
         public AgentDto Agent { get; set; }
         public int? SpecialistId { get; set; }
