@@ -25,7 +25,7 @@ namespace BricsSocial.Domain.Entities
             public const int PositionMinLength = 1;
             public const int PositionMaxLength = 200;
             public const int PhotoMinLength = 1;
-            public const int PhotoMaxLength = 2 << 20;
+            public const int PhotoMaxLength = 200;
         }
     }
 }

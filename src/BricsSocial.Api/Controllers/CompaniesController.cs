@@ -6,6 +6,7 @@ using BricsSocial.Application.Companies.DeleteCompany;
 using BricsSocial.Application.Companies.GetCompanies;
 using BricsSocial.Application.Companies.GetCompany;
 using BricsSocial.Application.Companies.UpdateCompany;
+using BricsSocial.Application.Companies.UpdateCompanyLogo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BricsSocial.Api.Controllers
@@ -70,6 +71,19 @@ namespace BricsSocial.Api.Controllers
             await Mediator.Send(new DeleteCompanyCommand { Id = id }, cancellationToken);
 
             return NoContent();
+        }
+
+        [HttpPut("{id}/logo")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequestType(typeof(UpdateCompanyLogoCommand))]
+        public async Task<ActionResult<FileUploadResponse>> UpdateLogo(int id, IFormFile file, CancellationToken cancellationToken)
+        {
+            return Ok(await Mediator.Send(new UpdateCompanyLogoCommand { Id = id, File = file }, cancellationToken));
         }
     }
 }
