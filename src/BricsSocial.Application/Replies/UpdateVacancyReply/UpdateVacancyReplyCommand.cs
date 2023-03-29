@@ -45,6 +45,9 @@ namespace BricsSocial.Application.Replies.UpdateVacancyReply
 
             var reply = await _context.Replies
                 .Where(r => r.Id == request.Id)
+                .Include(r => r.Agent)
+                .Include(r => r.Specialist)
+                .Include(r => r.Vacancy)
                 .FirstOrDefaultAsync();
 
             if (reply == null)

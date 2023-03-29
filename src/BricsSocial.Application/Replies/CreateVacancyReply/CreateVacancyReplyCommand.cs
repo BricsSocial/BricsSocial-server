@@ -61,6 +61,9 @@ namespace BricsSocial.Application.Replies.CreateVacancyReply
 
             await _context.SaveChangesAsync(cancellationToken);
 
+            reply.Specialist = specialist;
+            reply.Vacancy = vacancy;
+
             return _mapper.Map<ReplyDto>(reply);
         }
     }
