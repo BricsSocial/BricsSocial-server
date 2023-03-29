@@ -7,6 +7,7 @@ using BricsSocial.Application.Common.Exceptions;
 using BricsSocial.Application.Common.Exceptions.Application;
 using BricsSocial.Application.Vacancies.Common;
 using AutoMapper;
+using BricsSocial.Domain.Enums;
 
 namespace BricsSocial.Application.Vacancies.CreateVacancy
 {
@@ -48,6 +49,7 @@ namespace BricsSocial.Application.Vacancies.CreateVacancy
             vacancy.Offerings = request.Offerings;
             vacancy.CompanyId = agent.CompanyId;
             vacancy.SkillTags = request.SkillTags;
+            vacancy.Status = VacancyStatus.Open;
 
             _context.Vacancies.Add(vacancy);
 

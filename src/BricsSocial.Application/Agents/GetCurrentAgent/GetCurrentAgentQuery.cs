@@ -34,7 +34,7 @@ namespace BricsSocial.Application.Agents.GetCurrentAgent
 
         public async Task<AgentDto> Handle(GetCurrentAgentQuery request, CancellationToken cancellationToken)
         {
-            var agent = await _agentService.GetAgentByUserId(_currentUser.UserId);
+            var agent = await _agentService.GetAgentByUserIdAsync(_currentUser.UserId);
 
             return _mapper.Map<AgentDto>(agent);
         }

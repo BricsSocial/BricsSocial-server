@@ -1,5 +1,6 @@
 ﻿using BricsSocial.Application.Common.Interfaces;
 using BricsSocial.Infrastructure.Authentication;
+using BricsSocial.Infrastructure.FileStorage;
 using BricsSocial.Infrastructure.Identity;
 using BricsSocial.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
@@ -21,6 +22,7 @@ namespace BricsSocial.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // DB context
             if (configuration.GetValue<bool>("UseInMemoryDatabase"))
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
@@ -30,7 +32,7 @@ namespace BricsSocial.Infrastructure
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                 {
-                    var connectionString = Environment.GetEnvironmentVariable("BricsConnectionString");
+                    var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
                     options.UseNpgsql(connectionString,
                         builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
                     //options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
@@ -44,15 +46,20 @@ namespace BricsSocial.Infrastructure
 
             services.AddScoped<ApplicationDbContextInitializer>();
 
+            // File storage
+            var s3Options = new S3Options();
+            s3Options.ServiceUrl = Environment.GetEnvironmentVariable("S3_SERVICE_URL");
+            s3Options.Region = Environment.GetEnvironmentVariable("S3_REGION");
+            s3Options.BucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
+            s3Options.KeyId = Environment.GetEnvironmentVariable("S3_KEY_ID");
+            s3Options.KeySecret = Environment.GetEnvironmentVariable("S3_KEY_SECRET");
+            services.AddSingleton(s3Options);
+
+            services.AddScoped<IFileStorage, S3FileStorage>();
+
+            // Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            //services.AddDefaultIdentity<ApplicationUser>()
-            //    .AddRoles<IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            //services.AddIdentityServer()
-            //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddTransient<IIdentityService, IdentityService>();
 

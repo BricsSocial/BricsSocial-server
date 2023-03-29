@@ -33,7 +33,7 @@ services:
   bricssocial.api:
     image: ${DOCKER_REGISTRY-}bricssocialapi
     environment:
-      - BricsConnectionString=Username=postgres;Password=postgres;Host=postgres;Port=5432;Database=bricsdb
+     - DB_CONNECTION_STRING=Username=postgres;Password=postgres;Host=postgres;Port=5432;Database=bricsdb
     #networks:
     #  - postgres
 

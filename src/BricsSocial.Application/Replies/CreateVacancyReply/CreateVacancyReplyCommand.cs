@@ -39,7 +39,7 @@ namespace BricsSocial.Application.Replies.CreateVacancyReply
 
         public async Task<ReplyDto> Handle(CreateVacancyReplyCommand request, CancellationToken cancellationToken)
         {
-            var specialist = _specialistService.GetSpecialistByUserId(_currentUser.UserId);
+            var specialist = await _specialistService.GetSpecialistByUserIdAsync(_currentUser.UserId);
 
             var vacancy = await _context.Vacancies
                 .Where(v => v.Id == request.VacancyId)
@@ -60,6 +60,9 @@ namespace BricsSocial.Application.Replies.CreateVacancyReply
             _context.Replies.Add(reply);
 
             await _context.SaveChangesAsync(cancellationToken);
+
+            reply.Specialist = specialist;
+            reply.Vacancy = vacancy;
 
             return _mapper.Map<ReplyDto>(reply);
         }

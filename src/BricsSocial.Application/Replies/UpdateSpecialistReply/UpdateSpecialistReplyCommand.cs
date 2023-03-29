@@ -42,10 +42,13 @@ namespace BricsSocial.Application.Replies.UpdateSpecialistReply
 
         public async Task<ReplyDto> Handle(UpdateSpecialistReplyCommand request, CancellationToken cancellationToken)
         {
-            var specialist = _specialistService.GetSpecialistByUserId(_currentUser.UserId);
+            var specialist = await _specialistService.GetSpecialistByUserIdAsync(_currentUser.UserId);
 
             var reply = await _context.Replies
                 .Where(r => r.Id == request.Id)
+                .Include(r => r.Agent)
+                .Include(r => r.Specialist)
+                .Include(r => r.Vacancy)
                 .FirstOrDefaultAsync();
 
             if (reply == null)

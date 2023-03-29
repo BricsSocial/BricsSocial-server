@@ -42,13 +42,12 @@ namespace BricsSocial.Application.Vacancies.UpdateVacancy
         {
             var vacancy = await _context.Vacancies
                 .Where(v => v.Id == request.Id)
-                .Include(v => v.SkillTags)
                 .FirstOrDefaultAsync();
 
             if (vacancy is null)
                 throw new NotFoundException(nameof(vacancy), request.Id!);
 
-            await _agentService.CheckAgentBelongsToCompany(_currentUser.UserId, vacancy.CompanyId);
+            await _agentService.CheckAgentBelongsToCompanyAsync(_currentUser.UserId, vacancy.CompanyId);
 
             if (request.Name != null)
                 vacancy.Name = request.Name;

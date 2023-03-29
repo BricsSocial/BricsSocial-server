@@ -38,7 +38,7 @@ namespace BricsSocial.Application.Vacancies.DeleteVacancy
                 throw new NotFoundException(nameof(vacancy), request.Id);
 
             if(_currentUser.Role == UserRoles.Agent)
-                await _agentService.CheckAgentBelongsToCompany(_currentUser.UserId, vacancy.CompanyId);
+                await _agentService.CheckAgentBelongsToCompanyAsync(_currentUser.UserId, vacancy.CompanyId);
             
             _context.Vacancies.Remove(vacancy);
 

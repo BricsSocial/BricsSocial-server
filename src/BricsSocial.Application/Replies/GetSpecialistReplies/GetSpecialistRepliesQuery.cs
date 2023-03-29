@@ -46,7 +46,7 @@ namespace BricsSocial.Application.Replies.GetSpecialistReplies
 
         public async Task<PaginatedList<ReplyDto>> Handle(GetSpecialistRepliesQuery request, CancellationToken cancellationToken)
         {
-            var specialist = await _specialistService.GetSpecialistByUserId(_currentUser.UserId);
+            var specialist = await _specialistService.GetSpecialistByUserIdAsync(_currentUser.UserId);
 
             var replies = await _context.Replies
                 .Where(r => r.SpecialistId == specialist.Id)

@@ -49,7 +49,7 @@ namespace BricsSocial.Application.Companies.UpdateCompany
             if (company is null)
                 throw new NotFoundException(nameof(company), request.Id!);
 
-            await _agentService.CheckAgentBelongsToCompany(_currentUser.UserId!, company.Id);
+            await _agentService.CheckAgentBelongsToCompanyAsync(_currentUser.UserId!, company.Id);
 
             if (request.Name != null)
                 company.Name = request.Name;

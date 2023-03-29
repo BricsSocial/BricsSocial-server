@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BricsSocial.Application", "
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A3E16B96-AE56-4DB1-8FFE-D9DFFEAE9874}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BricsSocial.Api.Client.TestApp", "..\src\BricsSocial.Api.Client.TestApp\BricsSocial.Api.Client.TestApp.csproj", "{40511C5C-AA9C-4238-B870-D250EB13FB77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BricsSocial.Api.Client.TestApp", "..\src\BricsSocial.Api.Client.TestApp\BricsSocial.Api.Client.TestApp.csproj", "{40511C5C-AA9C-4238-B870-D250EB13FB77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

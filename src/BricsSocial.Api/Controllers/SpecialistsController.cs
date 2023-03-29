@@ -8,10 +8,12 @@ using BricsSocial.Application.Replies.UpdateSpecialistReply;
 using BricsSocial.Application.Specialists.Common;
 using BricsSocial.Application.Specialists.CreateSpecialist;
 using BricsSocial.Application.Specialists.DeleteSpecialist;
+using BricsSocial.Application.Specialists.DeleteSpecialistPhoto;
 using BricsSocial.Application.Specialists.GetCurrentSpecialist;
 using BricsSocial.Application.Specialists.GetSpecialist;
 using BricsSocial.Application.Specialists.GetSpecialists;
 using BricsSocial.Application.Specialists.UpdateSpecialist;
+using BricsSocial.Application.Specialists.UpdateSpecialistPhoto;
 using BricsSocial.Application.Vacancies.Common;
 using Microsoft.AspNetCore.Mvc;
 
@@ -87,6 +89,34 @@ namespace BricsSocial.Api.Controllers
             await Mediator.Send(new DeleteSpecialistCommand { Id = id }, cancellationToken);
 
             return NoContent();
+        }
+
+        [HttpPut("{id}/photo")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequestType(typeof(UpdateSpecialistPhotoCommand))]
+        public async Task<ActionResult<FileUploadResponse>> UpdatePhoto(int id, IFormFile file, CancellationToken cancellationToken)
+        {
+            return Ok(await Mediator.Send(new UpdateSpecialistPhotoCommand { Id = id, File = file }, cancellationToken));
+        }
+
+        [HttpDelete("{id}/photo")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequestType(typeof(DeleteSpecialistPhotoCommand))]
+        public async Task<ActionResult> DeletePhoto(int id, CancellationToken cancellationToken)
+        {
+            await Mediator.Send(new DeleteSpecialistPhotoCommand { Id = id }, cancellationToken);
+
+            return Ok();
         }
 
         [HttpPost("replies")]
