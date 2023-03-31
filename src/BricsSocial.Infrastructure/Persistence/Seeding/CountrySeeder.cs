@@ -12,6 +12,15 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
     {
         private readonly IApplicationDbContext _context;
 
+        private readonly List<Country> _countries = new List<Country>
+        {
+            new Country { Name = "Brasil" },
+            new Country { Name = "Russia" },
+            new Country { Name = "India" },
+            new Country { Name = "China" },
+            new Country { Name = "South Africa" },
+        };
+
         public CountrySeeder(IApplicationDbContext context)
         {
             _context = context;
@@ -22,16 +31,7 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
             if (_context.Countries.Any())
                 return;
 
-            var countries = new List<Country>
-            {
-                new Country { Name = "Brasil" },
-                new Country { Name = "Russia" },
-                new Country { Name = "India" },
-                new Country { Name = "China" },
-                new Country { Name = "South Africa" },
-            };
-
-            _context.Countries.AddRange(countries);
+            _context.Countries.AddRange(_countries);
 
             await _context.SaveChangesAsync(default);
         }

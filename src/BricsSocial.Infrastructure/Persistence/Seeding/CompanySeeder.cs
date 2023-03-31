@@ -13,6 +13,22 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
     {
         private readonly IApplicationDbContext _context;
 
+        private readonly List<Company> _companies = new List<Company>
+        {
+            new Company
+            {
+                Name = "Gazprom Neft",
+                Description = "Gazprom Neft PAO is an integrated oil company engaged in the exploration, development, production, transportation, and sale of crude oil and gas.",
+                CountryId = 2
+            },
+            new Company
+            {
+                Name = "ROSATOM",
+                Description = "State Atomic Energy Corporation Rosatom (ROSATOM) is one of global technological leaders, with capacities in the nuclear sector and beyond, and business partners in 50 countries.",
+                CountryId = 2
+            }
+        };
+
         public CompanySeeder(IApplicationDbContext context)
         {
             _context = context;
@@ -23,20 +39,9 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
             if (_context.Companies.Any())
                 return;
 
-            var russia = _context.Countries.Where(c => c.Name == "Russia").First();
-            var china = _context.Countries.Where(c => c.Name == "China").First();
+            //_context.Companies.AddRange(_companies);
 
-            var companies = new List<Company>
-            {
-                new Company { Name = "Gazprom", Description = "Global Oil and Gas company", CountryId = russia.Id },
-                new Company { Name = "SBER", Description = "Largest bank and a leading global financial institution with a 179-year history", CountryId = russia.Id },
-                new Company { Name = "Yandex", Description = "Multinational technology company providing Internet-related products and services", CountryId = russia.Id },
-                new Company { Name = "Huawei", Description = "Leading provider of information and communications technology, infrastructure and smart devices", CountryId = china.Id }
-            };
-
-            _context.Companies.AddRange(companies);
-
-            await _context.SaveChangesAsync(default);
+            //await _context.SaveChangesAsync(default);
         }
     }
 }

@@ -16,6 +16,26 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
         private readonly IApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
+        private readonly List<Agent> _gazpromNeftAgents = new List<Agent>
+        {
+            new Agent
+            {
+                FirstName = "Ivan",
+                LastName = "Semenov",
+                Position = "HR manager"
+            }
+        };
+
+        private readonly List<Agent> _rosatomAgents = new List<Agent>
+        {
+            new Agent
+            {
+                FirstName = "Vladimir",
+                LastName = "Petrov",
+                Position = "HR manager"
+            }
+        };
+
         public AgentSeeder(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
@@ -27,53 +47,24 @@ namespace BricsSocial.Infrastructure.Persistence.Seeding
             if (_context.Agents.Any())
                 return;
 
-            var gazprom = _context.Companies.Where(c => c.Name == "Gazprom").First();
-            var sber = _context.Companies.Where(c => c.Name == "SBER").First();
-            var yandex = _context.Companies.Where(c => c.Name == "Yandex").First();
-            var huawei = _context.Companies.Where(c => c.Name == "Huawei").First();
+            var gazpromNeft = _context.Companies.Where(c => c.Id == 1).First();
+            var rosatom = _context.Companies.Where(c => c.Id == 2).First();
 
-            var companies = new List<Company> { gazprom, sber, yandex };
-
-            var gazpromAgentData = new List<(string, string, string)>
-            {
-                ("Vladimir", "Belov", "Tech lead"),
-                ("Ivan", "Ivanov", "HR manager"),
-            };
-
-            var sberAgentsData = new List<(string, string, string)>
-            {
-                ("Semen", "Karpov", "SCRUM master"),
-                ("Dmitry", "Lyadov", "HR manager"),
-            };
-
-            var yandexAgentsData = new List<(string, string, string)>
-            {
-                ("Andrew", "Novikov", "HR lead"),
-                ("Mike", "Kravetz", "HR manager"),
-            };
-
-            var huaweiAgentsData = new List<(string, string, string)>
-            {
-                ("Meng", "Tao", "HR"),
-            };
-
-            await AddCompanyAgents(gazprom, gazpromAgentData);
-            await AddCompanyAgents(sber, sberAgentsData);
-            await AddCompanyAgents(yandex, yandexAgentsData);
-            await AddCompanyAgents(huawei, huaweiAgentsData);
+            await AddCompanyAgents(gazpromNeft, _gazpromNeftAgents);
+            await AddCompanyAgents(rosatom, _rosatomAgents);
         }
 
-        private async Task AddCompanyAgents(Company company, List<(string, string, string)> agentsData)
+        private async Task AddCompanyAgents(Company company, List<Agent> agentsData)
         {
             var password = "Agent123!";
 
             foreach (var agentData in agentsData)
             {
-                var firstName = agentData.Item1;
-                var lastName = agentData.Item2;
-                var position = agentData.Item3;
+                var firstName = agentData.FirstName;
+                var lastName = agentData.LastName;
+                var position = agentData.Position;
 
-                var email = $"{firstName.ToLower()[0]}.{lastName.ToLower()}@{company.Name.ToLower()}";
+                var email = $"{firstName.ToLower().First()}.{lastName.ToLower()}@{company.Name.Split(" ").First().ToLower()}.ru";
 
                 var agentUser = new ApplicationUser
                 {
