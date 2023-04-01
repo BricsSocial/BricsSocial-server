@@ -1,6 +1,10 @@
 # Руководство пользователя BricsSocial
 ## BricsSocial-server
 
+> API для интеграции клиентских приложений
+
+Swagger + Open API: https://brics-social.ru/swagger/index.html
+
 ## BricsSocial-web
 
 > Веб-приложение для агентов, предназначенное для поиска потенциальных сотрудников.
