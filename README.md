@@ -1,4 +1,7 @@
 # Руководство пользователя BricsSocial
+
+Автор руководства: [Абдельсалам Ш.](https://github.com/FloydanTheBeast)
+
 ## BricsSocial-server
 
 > API для интеграции клиентских приложений
